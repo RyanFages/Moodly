@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, Dimensions, Animated, PanResponder } from 'reac
 import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
 
 const { width } = Dimensions.get('window');
-const radius = width; // Rayon de la roue
+const outerRadius = width; // Rayon de la roue
+const innerRadius = outerRadius / 3; // Rayon intérieur de la roue
 const centerX = 0;
 const centerY = 0;
 
@@ -29,8 +30,8 @@ const calculateAngle = (x, y) => {
 };
 
 const EmotionWheel = () => {
-
   const [selectedEmotion, setSelectedEmotion] = useState(null);
+  const [selectedColor, setSelectedColor] = useState('#000'); // Couleur de l'émotion sélectionnée
 
   const rotateAnim = useRef(new Animated.Value(0)).current; // Valeur animée pour la rotation
   const currentAngle = useRef(0); // Stocke l'angle actuel de la roue
@@ -72,6 +73,7 @@ const EmotionWheel = () => {
     
         // Met à jour l'émotion sélectionnée
         setSelectedEmotion(emotions[adjustedIndex].label);
+        setSelectedColor(emotions[adjustedIndex].color); // Mettez à jour la couleur de l'émotion sélectionnée
       },
     })
   ).current;
@@ -80,20 +82,26 @@ const EmotionWheel = () => {
     const startAngle = index * anglePerEmotion;
     const endAngle = (index + 1) * anglePerEmotion;
 
-    // Calcul des coordonnées pour les arcs
-    const x1 = radius * Math.cos(startAngle);
-    const y1 = radius * Math.sin(startAngle);
-    const x2 = radius * Math.cos(endAngle);
-    const y2 = radius * Math.sin(endAngle);
+    // Coordonnées pour les arcs extérieurs
+    const x1_outer = outerRadius * Math.cos(startAngle);
+    const y1_outer = outerRadius * Math.sin(startAngle);
+    const x2_outer = outerRadius * Math.cos(endAngle);
+    const y2_outer = outerRadius * Math.sin(endAngle);
 
-    const pathData = `M 0 0 L ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2} Z`;
+    // Coordonnées pour les arcs intérieurs (pour créer l'espace vide au centre)
+    const x1_inner = innerRadius * Math.cos(startAngle);
+    const y1_inner = innerRadius * Math.sin(startAngle);
+    const x2_inner = innerRadius * Math.cos(endAngle);
+    const y2_inner = innerRadius * Math.sin(endAngle);
+
+    const pathData = `M ${x1_inner} ${y1_inner} L ${x1_outer} ${y1_outer} A ${outerRadius} ${outerRadius} 0 0 1 ${x2_outer} ${y2_outer} L ${x2_inner} ${y2_inner} A ${innerRadius} ${innerRadius} 0 0 0 ${x1_inner} ${y1_inner} Z`;
 
     // Calculer l'angle central du segment
     const midAngle = startAngle + anglePerEmotion / 2;
 
     // Calculer la position du texte
-    const textX = (radius / 2) * Math.cos(midAngle);
-    const textY = (radius / 2) * Math.sin(midAngle);
+    const textX = (innerRadius + (outerRadius - innerRadius) / 2) * Math.cos(midAngle);
+    const textY = (innerRadius + (outerRadius - innerRadius) / 2) * Math.sin(midAngle);
 
     // Ajuster la rotation du texte pour qu'il soit perpendiculaire au centre
     const textRotation = (midAngle * 180) / Math.PI + 90; // Convertir les radians en degrés et ajuster
@@ -123,8 +131,11 @@ const EmotionWheel = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Quelle est votre émotion ?</Text>
-
+      <Text style={styles.text}>Aujourd'hui je me sens</Text>
+      <Text style={[styles.centeredEmotionText, { color: selectedColor }]}>
+        {selectedEmotion}
+      </Text>
+      {/* Vue de la roue des émotions */}
       <View {...panResponder.panHandlers}>
         <Animated.View
           style={{
@@ -134,16 +145,11 @@ const EmotionWheel = () => {
             }) }],
           }}
         >
-          <Svg width={width - 40} height={width - 40} viewBox={`-${radius} -${radius} ${2 * radius} ${2 * radius}`}>
+          <Svg width={width - 40} height={width - 40} viewBox={`-${outerRadius} -${outerRadius} ${2 * outerRadius} ${2 * outerRadius}`}>
             {emotions.map((emotion, index) => renderEmotionSegment(emotion, index))}
           </Svg>
         </Animated.View>
       </View>
-
-       {/* Affichage de l'émotion sélectionnée */}
-       {selectedEmotion && (
-        <Text style={styles.selectedEmotionText}>Émotion sélectionnée : {selectedEmotion}</Text>
-      )}
     </View>
   );
 };
@@ -156,7 +162,21 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    marginBottom: 20,
+    fontWeight: 'bold',
+  },
+  centeredEmotion: {
+    position: 'absolute',
+    top: '42%', // Ajuster la position pour être centré
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 150, // Largeur ajustée pour contenir l'émotion
+    height: 150, // Hauteur ajustée
+  },
+  centeredEmotionText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 60,
   },
   selectedEmotionText: {
     marginTop: 20,

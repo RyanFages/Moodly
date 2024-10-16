@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
-import TestPage from "../pages/Testpage";
+import MoodWhell from "../pages/MoodWhell";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,9 +22,9 @@ const AppNavigator = () => {
                     options={{ title: "Home" }}
                 />
                 <Stack.Screen
-                    name="Test"
-                    component={TestPage}
-                    options={{ title: "Test" }}
+                    name="MoodWhell"
+                    component={MoodWhell}
+                    options={{ title: "MoodWhell" }}
                 />
             </Stack.Navigator>
         </NavigationContainer>

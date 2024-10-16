@@ -8,16 +8,16 @@ const HomePage = ({ navigation }) => {
         // Redirige l'utilisateur vers la page de connexion
         navigation.navigate("Login");
     };
-    const test = () => {
+    const MoodWhell = () => {
         // Redirige l'utilisateur vers la page de connexion
-        navigation.navigate("Test");
+        navigation.navigate("MoodWhell");
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Welcome to the Home Page!</Text>
             <Button title="Logout" onPress={handleLogout} />
-            <Button title="Test" onPress={test} />
+            <Button title="MoodWhell" onPress={MoodWhell} />
 
         </View>
     );
