@@ -8,11 +8,17 @@ const HomePage = ({ navigation }) => {
         // Redirige l'utilisateur vers la page de connexion
         navigation.navigate("Login");
     };
+    const test = () => {
+        // Redirige l'utilisateur vers la page de connexion
+        navigation.navigate("Test");
+    };
 
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Welcome to the Home Page!</Text>
             <Button title="Logout" onPress={handleLogout} />
+            <Button title="Test" onPress={test} />
+
         </View>
     );
 };
