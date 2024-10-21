@@ -8,7 +8,7 @@ import LabeledPasswordInput from "../molecules/LabeledPasswordInput";
 import { globalStyles } from '../styles/globalStyles'; // Importez les styles globaux
 
 const LoginForm = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation(); 
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
