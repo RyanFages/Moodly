@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import Svg, { Rect, Text as SvgText } from "react-native-svg";
 import { treemap, hierarchy } from "d3-hierarchy";
 import { timeDay } from "d3-time";
@@ -14,27 +14,43 @@ function calculateWeight(date) {
 
 // Préparer les données pour le TreeMap : Emotion > Dates
 function prepareData(data) {
+    const today = new Date().toISOString().split("T")[0]; // Format de la date actuelle (YYYY-MM-DD)
     const groupedByMood = data.reduce((acc, curr) => {
         // Vérifier si l'émotion existe déjà dans l'accumulateur
         if (!acc[curr.Mood]) {
             acc[curr.Mood] = { name: curr.Mood, children: [] };
         }
 
-        // Grouper par date pour chaque émotion
         const day = curr.Date.split(" ")[0]; // Prendre uniquement la date (sans heure)
-        const dateIndex = acc[curr.Mood].children.findIndex(
-            (d) => d.name === day
-        );
 
-        if (dateIndex > -1) {
-            acc[curr.Mood].children[dateIndex].value += calculateWeight(
-                curr.Date
+        if (day === today) {
+            // Si c'est aujourd'hui, l'ajouter directement
+            const dateIndex = acc[curr.Mood].children.findIndex(
+                (d) => d.name === today
             );
+
+            if (dateIndex > -1) {
+                acc[curr.Mood].children[dateIndex].value += 1;
+            } else {
+                acc[curr.Mood].children.push({
+                    name: today,
+                    value: 1,
+                });
+            }
         } else {
-            acc[curr.Mood].children.push({
-                name: day,
-                value: calculateWeight(curr.Date),
-            });
+            // Regrouper les autres jours dans une case "Autres jours"
+            const otherIndex = acc[curr.Mood].children.findIndex(
+                (d) => d.name === "Autres jours"
+            );
+
+            if (otherIndex > -1) {
+                acc[curr.Mood].children[otherIndex].value += 1;
+            } else {
+                acc[curr.Mood].children.push({
+                    name: "Autres jours",
+                    value: 1,
+                });
+            }
         }
 
         return acc;
@@ -45,8 +61,9 @@ function prepareData(data) {
 }
 
 const TreeMapChart = ({ data, width, height }) => {
-
     const treeData = prepareData(data);
+    const Today = new Date().toISOString().split("T")[0];
+
     // Créer la hiérarchie du TreeMap
     const root = hierarchy(treeData)
         .sum((d) => d.value)
@@ -67,33 +84,38 @@ const TreeMapChart = ({ data, width, height }) => {
         Frustration: "#2EBB6E",
     };
 
-        // Fonction pour gérer le clic sur un rectangle
-        const handlePress = (mood, date, value) => {
-            Alert.alert(
-                `${mood} - ${date}`,
-                `Valeur: ${value}`,
-                [{ text: "OK" }]
-            );
-        };
+    // Fonction pour gérer le clic sur un rectangle
+    const handlePress = (mood, date, value) => {
+        Alert.alert(
+            `${date}`,
+            `Sentiment : ${mood}\nNombre d'employés: ${value}`,
+            [{ text: "OK" }]
+        );
+    };
 
     return (
         <View>
             <Svg width={width} height={height}>
-                {root.leaves().map((leaf, index) => (
-                    <React.Fragment key={index}>
-                        <Rect
-                            x={leaf.x0}
-                            y={leaf.y0}
-                            width={leaf.x1 - leaf.x0}
-                            height={leaf.y1 - leaf.y0}
-                            fill={emotionColors[leaf.parent.data.name]}
-                            stroke="white"
-                            onPress={() => handlePress(leaf.parent.data.name, leaf.data.name, leaf.value)} // Ajout de la gestion des clics
-                        />
-                        {/* Vérifier si c'est le premier élément de cette émotion */}
-                        {index === 0 ||
-                        leaf.parent.data.name !==
-                            root.leaves()[index - 1].parent.data.name ? (
+                {root.leaves().map((leaf, index) => {
+                    const isOther = leaf.data.name === "Autres jours"; // Vérifier si c'est le groupe des autres jours
+
+                    return (
+                        <React.Fragment key={index}>
+                            <Rect
+                                x={leaf.x0}
+                                y={leaf.y0}
+                                width={leaf.x1 - leaf.x0}
+                                height={leaf.y1 - leaf.y0}
+                                fill={emotionColors[leaf.parent.data.name]}
+                                stroke="white"
+                                onPress={() =>
+                                    handlePress(
+                                        leaf.parent.data.name,
+                                        leaf.data.name,
+                                        leaf.value
+                                    )
+                                }
+                            />
                             <SvgText
                                 x={leaf.x0 + (leaf.x1 - leaf.x0) / 2}
                                 y={leaf.y0 + (leaf.y1 - leaf.y0) / 2}
@@ -104,9 +126,22 @@ const TreeMapChart = ({ data, width, height }) => {
                             >
                                 {leaf.parent.data.name}
                             </SvgText>
-                        ) : null}
-                    </React.Fragment>
-                ))}
+                            {/* Afficher "Autres jours" pour les jours regroupés */}
+                            {isOther ? (
+                                <SvgText
+                                    x={leaf.x0 + (leaf.x1 - leaf.x0) / 2}
+                                    y={leaf.y0 + (leaf.y1 - leaf.y0) / 2 + 10}
+                                    fontSize="10"
+                                    fill="black"
+                                    textAnchor="middle"
+                                    alignmentBaseline="middle"
+                                >
+                                    Autres jours
+                                </SvgText>
+                            ) : null}
+                        </React.Fragment>
+                    );
+                })}
             </Svg>
         </View>
     );
