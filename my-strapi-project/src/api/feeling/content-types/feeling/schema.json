@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "feelings",
+  "info": {
+    "singularName": "feeling",
+    "pluralName": "feelings",
+    "displayName": "Feeling",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Emoticone": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "date": {
+      "type": "datetime"
+    },
+    "contexte": {
+      "type": "boolean"
+    }
+  }
+}

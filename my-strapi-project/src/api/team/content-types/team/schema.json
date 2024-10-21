@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "teams",
+  "info": {
+    "singularName": "team",
+    "pluralName": "teams",
+    "displayName": "Team ",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "manager": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::manager.manager",
+      "inversedBy": "team"
+    },
+    "user_in_teams": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
+    },
+    "Title": {
+      "type": "string"
+    },
+    "feelings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::feeling.feeling"
+    }
+  }
+}
