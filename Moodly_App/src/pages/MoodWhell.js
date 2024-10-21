@@ -1,6 +1,9 @@
-import React, {useState, useRef} from 'react';
-import { View, Text, StyleSheet, Dimensions, Animated, PanResponder } from 'react-native';
-import Svg, { G, Path, Text as SvgText } from 'react-native-svg';
+import React, {useState, useRef, useEffect} from 'react';
+import { View, Text, StyleSheet, Dimensions, Animated, PanResponder, Image } from 'react-native';
+import Svg, { G, Path } from 'react-native-svg';
+import { Image as SvgImage } from 'react-native-svg'; // Importer le composant SVG pour l'image
+
+import ArrowIcon from '../components/atoms/arrow.png'; // Importer l'icône de flèche
 
 const { width } = Dimensions.get('window');
 const outerRadius = width; // Rayon de la roue
@@ -8,16 +11,26 @@ const innerRadius = outerRadius / 3; // Rayon intérieur de la roue
 const centerX = 0;
 const centerY = 0;
 
+//Importation des PNG
+import Heureux from '../components/atoms/Mood/Heureux.png'
+import Motivé from '../components/atoms/Mood/Motivé.png'
+import Neutre from '../components/atoms/Mood/Neutre.png'
+import Triste from '../components/atoms/Mood/Triste.png'
+import Stressé from '../components/atoms/Mood/Stressé.png'
+import Colère from '../components/atoms/Mood/Colère.png'
+import Fatigué from '../components/atoms/Mood/Fatigué.png'
+import Frustré from '../components/atoms/Mood/Frustré.png'
+
 // Liste des émotions
 const emotions = [
-  { label: 'Heureux', color: '#FFDD30' },
-  { label: 'Motivé', color: '#FF94BD' },
-  { label: 'Neutre', color: '#B0B0B0' },
-  { label: 'Triste', color: '#42A8FD' },
-  { label: 'Stressé', color: '#F68A37' },
-  { label: 'En Colère', color: '#FF2E2E' },
-  { label: 'Fatigué', color: '#9E76D6' },
-  { label: 'Frustré', color: '#936E32' },
+  { label: 'Fatigué', color: '#9E76D6', icon : Fatigué },
+  { label: 'Frustré', color: '#2EBB6E', icon : Frustré },
+  { label: 'Stressé', color: '#F68A37', icon : Stressé },
+  { label: 'En Colère', color: '#FF4545', icon : Colère },
+  { label: 'Motivé', color: '#FF94BD', icon : Motivé },
+  { label: 'Heureux', color: '#FFDD30', icon : Heureux },
+  { label: 'Neutre', color: '#B0B0B0', icon : Neutre },
+  { label: 'Triste', color: '#42A8FD', icon : Triste },
 ];
 
 // Calcul de l'angle pour chaque segment (360° / 8 émotions)
@@ -33,9 +46,21 @@ const EmotionWheel = () => {
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [selectedColor, setSelectedColor] = useState('#000'); // Couleur de l'émotion sélectionnée
 
-  const rotateAnim = useRef(new Animated.Value(0)).current; // Valeur animée pour la rotation
-  const currentAngle = useRef(0); // Stocke l'angle actuel de la roue
+  const initialRotation = 22.5 * (Math.PI / 180); // Convertir 22.5° en radians
+  const rotateAnim = useRef(new Animated.Value(initialRotation)).current; // Valeur animée pour la rotation
+  const currentAngle = useRef(initialRotation); // Initialiser avec l'angle de départ
   const lastAngle = useRef(0); // Angle lors de la dernière interaction
+
+  // Calculer l'émotion en fonction de la rotation initiale
+  useEffect(() => {
+   const normalizedAngle = (initialRotation % (2 * Math.PI)) + (initialRotation < 0 ? 2 * Math.PI : 0);
+   const adjustedAngle = normalizedAngle + Math.PI / 2;
+   const index = Math.floor(((2 * Math.PI) - adjustedAngle) / anglePerEmotion) % emotions.length;
+   const adjustedIndex = (index + emotions.length) % emotions.length;
+
+   setSelectedEmotion(emotions[adjustedIndex].label);
+   setSelectedColor(emotions[adjustedIndex].color);
+  }, []); // Ce useEffect se déclenche au chargement
 
   // PanResponder pour gérer les mouvements de glissement
   const panResponder = useRef(
@@ -96,15 +121,15 @@ const EmotionWheel = () => {
 
     const pathData = `M ${x1_inner} ${y1_inner} L ${x1_outer} ${y1_outer} A ${outerRadius} ${outerRadius} 0 0 1 ${x2_outer} ${y2_outer} L ${x2_inner} ${y2_inner} A ${innerRadius} ${innerRadius} 0 0 0 ${x1_inner} ${y1_inner} Z`;
 
-    // Calculer l'angle central du segment
-    const midAngle = startAngle + anglePerEmotion / 2;
+    // Calculer le centre de chaque segment
+    const centerAngle = (startAngle + endAngle) / 2;
+    const iconRadius = (outerRadius + innerRadius) / 2; // Rayon moyen pour centrer l'icône
+    const iconSize = Math.min(innerRadius, outerRadius) * 1.5; // Taille maximale de l'icône
+    const iconX = iconRadius * Math.cos(centerAngle) - iconSize / 2; // Centrer l'icône
+    const iconY = iconRadius * Math.sin(centerAngle) - iconSize / 2; // Centrer l'icône
 
-    // Calculer la position du texte
-    const textX = (innerRadius + (outerRadius - innerRadius) / 2) * Math.cos(midAngle);
-    const textY = (innerRadius + (outerRadius - innerRadius) / 2) * Math.sin(midAngle);
-
-    // Ajuster la rotation du texte pour qu'il soit perpendiculaire au centre
-    const textRotation = (midAngle * 180) / Math.PI + 90; // Convertir les radians en degrés et ajuster
+    // Ajustement pour que l'icône soit perpendiculaire
+    const iconRotation = centerAngle + Math.PI / 2; // Ajoute 90 degrés pour orienter l'icône vers le centre
 
     return (
       <G key={index}>
@@ -114,18 +139,34 @@ const EmotionWheel = () => {
           stroke="white"
           strokeWidth={2}
         />
-        <SvgText
-          x={textX}
-          y={textY}
-          fill="black"
-          fontSize={16}
-          textAnchor="middle"
-          alignmentBaseline="middle"
-          transform={`rotate(${textRotation} ${textX} ${textY})`} // Rotation du texte autour de son point de départ
+        <G
+          transform={`translate(${iconX + iconSize / 2}, ${iconY + iconSize / 2}) rotate(${iconRotation * (180 / Math.PI)})`}
         >
-          {emotion.label}
-        </SvgText>
+          {/* Affichage de l'icône PNG */}
+          <SvgImage
+            href={emotion.icon}
+            x={-iconSize / 2} // Ajuster la position de l'icône
+            y={-iconSize / 2} // Ajuster la position de l'icône
+            width={iconSize}
+            height={iconSize}
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </G>
       </G>
+    );
+  };
+
+  const renderArrow = () => {
+    return (
+      <Image
+        source={ArrowIcon}
+        style={{
+          position: 'absolute',
+          zIndex: 1,
+          left: '39%', // Centrer horizontalement
+          top: '-12%', // Centrer verticalement
+        }}
+      />
     );
   };
 
@@ -137,6 +178,7 @@ const EmotionWheel = () => {
       </Text>
       {/* Vue de la roue des émotions */}
       <View {...panResponder.panHandlers}>
+      {renderArrow()}
         <Animated.View
           style={{
             transform: [{ rotate: rotateAnim.interpolate({
