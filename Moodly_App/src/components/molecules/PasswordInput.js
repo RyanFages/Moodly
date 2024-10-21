@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
 
 const PasswordInput = ({ value, onChangeText, placeholder }) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -14,12 +14,15 @@ const PasswordInput = ({ value, onChangeText, placeholder }) => {
                 style={styles.input}
                 value={value}
                 onChangeText={onChangeText}
-                placeholder={placeholder}
+                placeholder={placeholder}   
                 secureTextEntry={!isPasswordVisible}
             />
             <TouchableOpacity onPress={togglePasswordVisibility}>
-                <Text style={styles.toggle}>{isPasswordVisible ? "Hide" : "Show"}</Text>
-            </TouchableOpacity>
+                <Image
+                    source={isPasswordVisible ? require('../../../assets/images/eye.png') : require('../../../assets/images/eye-off.png')}
+                    style={styles.icon}
+                />
+                </TouchableOpacity>
         </View>
     );
 };
@@ -35,9 +38,15 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
         padding: 10,
     },
-    toggle: {
+    icon: {
+        width: 24,
+        height: 24,
         marginLeft: 10,
-        color: 'blue',
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 
