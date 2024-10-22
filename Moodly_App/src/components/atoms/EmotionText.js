@@ -4,7 +4,7 @@ import { Text, StyleSheet } from 'react-native';
 const EmotionText = ({ emotion, color }) => {
   return (
     <Text style={styles.text}>
-      Aujourd'hui je me sens{' '}
+      Aujourd'hui je me sens{' '} 
       <Text style={[styles.emotion, { color }]}>
         {emotion}
       </Text>
@@ -15,8 +15,10 @@ const EmotionText = ({ emotion, color }) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: 24,
-    marginTop: 20,
+    // marginTop: 20,
     color: '#000000', // Couleur générale du texte, ajustable
+    width: 250,
+    textAlign: 'center',
   },
   emotion: {
     fontWeight: 'bold', // Pour accentuer l'émotion

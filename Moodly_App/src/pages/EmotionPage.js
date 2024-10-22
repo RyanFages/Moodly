@@ -23,7 +23,7 @@ import EmotionText from '../components/atoms/EmotionText';
 
 const MoodTrackerPage = () => {
   // Choisis ici l'émotion que tu veux afficher
-  const selectedEmotion = 'frustré'; // Change cette valeur pour tester d'autres émotions
+  const selectedEmotion = 'triste'; // Change cette valeur pour tester d'autres émotions
 
   const emotionData = {
     'heureux': {
@@ -56,7 +56,7 @@ const MoodTrackerPage = () => {
       color: '#FF4545',
       textColor: '#A40000',
       text: 'énervé',
-      image: require('./MoodEnColere.png'),
+      image: require('./MoodEnerve.png'),
     },
     'stressé': {
       color: '#F68A37',
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
   image: {
     width: 300,  // Set appropriate width for the image
     height: 300, // Set appropriate height for the image
-    marginBottom: 20, // Add some space between the image and the text
     resizeMode: 'contain', // Ensure the image fits inside the box
+    marginTop:-10,
   }
 });
 
