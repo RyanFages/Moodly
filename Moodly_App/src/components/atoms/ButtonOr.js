@@ -11,7 +11,7 @@ const Button = ({ title, onPress, style }) => {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#ffffff', // Couleur de l'intérieur du bouton
+        backgroundColor: '#f8f4f3', // Couleur de l'intérieur du bouton
         borderColor: '#3b2414', // Couleur des contours du bouton
         borderWidth: 2, // Épaisseur des contours
         paddingVertical: 10,
