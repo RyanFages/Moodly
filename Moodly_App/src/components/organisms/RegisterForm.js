@@ -6,25 +6,25 @@ import InputField from "../molecules/InputField";
 import Button from "../atoms/Button";
 import ButtonOr from "../atoms/ButtonOr";
 import LabeledPasswordInput from "../molecules/LabeledPasswordInput";
-import { globalStyles } from '../styles/globalStyles';
+import { globalStyles } from '../styles/globalStyles'; // Importez les styles globaux
 
-const LoginPage = () => {
+const RegisterPage = () => {
     const navigation = useNavigation();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleLogin = () => {
+    const handleRegister = () => {
         if (email === "123" && password === "123") {
             navigation.navigate("Home");
         } else {
-            Alert.alert("Login Failed", "Invalid email or password.");
+            Alert.alert("Registration Failed", "Invalid email or password.");
             setPassword("");
         }
     };
 
-    const goToRegister = () => {
-        navigation.navigate("RegisterPage");
+    const goToLogin = () => {
+        navigation.navigate("Login");
     };
 
     return (
@@ -33,7 +33,7 @@ const LoginPage = () => {
                 source={{ uri: 'https://st2.depositphotos.com/3096625/7785/v/380/depositphotos_77856480-stock-illustration-letter-m-logo.jpg' }}
                 style={styles.image}
             />
-            <Text style={globalStyles.title}>Login</Text>
+            <Text style={globalStyles.title}>Register</Text>
             <InputField
                 label="Email / username"
                 value={email}
@@ -48,13 +48,13 @@ const LoginPage = () => {
                 placeholder="Enter your password"
                 style={globalStyles.text}
             />
-            <Button title="Login" onPress={handleLogin} style={globalStyles.button} />
+            <Button title="Create account" onPress={handleRegister} style={globalStyles.button} />
             <View style={styles.separatorContainer}>
                 <View style={styles.separator} />
                 <Text style={styles.separatorText}>or</Text>
                 <View style={styles.separator} />
             </View>
-            <ButtonOr title="Register" onPress={goToRegister} style={globalStyles.button} />
+            <ButtonOr title="Login" onPress={goToLogin} style={globalStyles.button} />
         </View>
     );
 };
@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LoginPage;
+export default RegisterPage;

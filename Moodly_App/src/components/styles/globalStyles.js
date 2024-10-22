@@ -1,14 +1,19 @@
+import React, { useState } from "react";
 import { StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
 
 const loadFonts = async () => {
     await Font.loadAsync({
-        'Rubik': require('../../../assets/fonts/Rubik-Regular.ttf'),
-        'Rubik-Bold': require('../../../assets/fonts/Rubik-Bold.ttf'),
+        'Rubik': from('Rubik-Regular.ttf'),
+        'Rubik-Bold': from('Rubik-Bold.ttf'),
     });
 };
 
 const globalStyles = StyleSheet.create({
+    container: {
+        backgroundColor: '#f8f4f3',
+        padding: 20,
+    },
     text: {
         fontFamily: 'Rubik',
     },
@@ -18,14 +23,6 @@ const globalStyles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
-    },
-    button: {
-        borderRadius: 50,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        backgroundColor: '#007BFF',
-        alignItems: 'center',
-        justifyContent: 'center',
     },
 });
 
