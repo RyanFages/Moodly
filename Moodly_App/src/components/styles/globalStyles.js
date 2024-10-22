@@ -1,14 +1,18 @@
+import React, { useState } from "react";
 import { StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
 
 const loadFonts = async () => {
     await Font.loadAsync({
-        'Rubik': require('../../../assets/fonts/Rubik-Regular.ttf'),
-        'Rubik-Bold': require('../../../assets/fonts/Rubik-Bold.ttf'),
+        'Rubik': from('Rubik-Regular.ttf'),
+        'Rubik-Bold': from('Rubik-Bold.ttf'),
     });
 };
 
 const globalStyles = StyleSheet.create({
+    container: {
+        backgroundColor: '#f8f4f3',
+    },
     text: {
         fontFamily: 'Rubik',
     },

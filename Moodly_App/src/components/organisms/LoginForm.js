@@ -70,11 +70,12 @@ import { useNavigation } from "@react-navigation/native";
 
 import InputField from "../molecules/InputField";
 import Button from "../atoms/Button";
+import ButtonOr from "../atoms/ButtonOr";
 import LabeledPasswordInput from "../molecules/LabeledPasswordInput";
-import { globalStyles } from '../styles/globalStyles'; // Importez les styles globaux
+import { globalStyles } from '../styles/globalStyles';
 
-const LoginForm = () => {
-    const navigation = useNavigation(); 
+const LoginPage = () => {
+    const navigation = useNavigation();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -108,18 +109,22 @@ const LoginForm = () => {
         }
     };
 
+    const goToRegister = () => {
+        navigation.navigate("RegisterPage");
+    };
+
     return (
-        <View style={styles.container}>
+        <View style={globalStyles.container}>
             <Image
                 source={{ uri: 'https://st2.depositphotos.com/3096625/7785/v/380/depositphotos_77856480-stock-illustration-letter-m-logo.jpg' }}
                 style={styles.image}
             />
             <Text style={globalStyles.title}>Login</Text>
             <InputField
-                label="Email"
+                label="Email / username"
                 value={email}
                 onChangeText={setEmail}
-                placeholder="Enter your email"
+                placeholder="Enter your email or your Username"
                 style={globalStyles.text}
             />
             <LabeledPasswordInput
@@ -129,15 +134,23 @@ const LoginForm = () => {
                 placeholder="Enter your password"
                 style={globalStyles.text}
             />
-            <Button 
-                title={loading ? "Logging in..." : "Login"} 
-                onPress={handleLogin} 
-                style={globalStyles.button} 
+            <Button
+                title={loading ? "Logging in..." : "Login"}
+                onPress={handleLogin}
+                style={globalStyles.button}
                 disabled={loading} // Désactive le bouton pendant le chargement
             />
+                <View style={styles.separatorContainer}>
+                <View style={styles.separator} />
+                <Text style={styles.separatorText}>or</Text>
+                <View style={styles.separator} />
+            </View>
+            <ButtonOr title="Register" onPress={goToRegister} style={globalStyles.button} />
         </View>
     );
 };
+
+//Séparateur simple sans le or L.51/55 <Button title="Login" onPress={handleLogin} style={globalStyles.button} /> <Button title="Register" onPress={goToRegister} style={[globalStyles.button, { marginTop: 10 }]} />
 
 const styles = StyleSheet.create({
     container: {
@@ -149,6 +162,21 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         alignSelf: 'center',
     },
+    separatorContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 20,
+    },
+    separator: {
+        flex: 1,
+        height: 1,
+        backgroundColor: '#000',
+    },
+    separatorText: {
+        marginHorizontal: 10,
+        fontSize: 16,
+        color: '#000',
+    },
 });
 
-export default LoginForm;
+export default LoginPage;
