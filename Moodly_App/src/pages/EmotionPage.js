@@ -19,9 +19,10 @@
 import React from 'react';
 import { View, StyleSheet, Image} from 'react-native';
 import EmotionText from '../components/atoms/EmotionText';
+import Button from "../components/atoms/Button";
 
 
-const MoodTrackerPage = () => {
+const MoodTrackerPage = ({ navigation }) => {
   // Choisis ici l'émotion que tu veux afficher
   const selectedEmotion = 'triste'; // Change cette valeur pour tester d'autres émotions
 
@@ -31,8 +32,6 @@ const MoodTrackerPage = () => {
       textColor: '#BC9D03',
       text: 'heureux',
       image: require('./MoodHeureux.png'),
-      
-
     },
     'motivé': {
       color: '#FF94BD',
@@ -81,10 +80,16 @@ const MoodTrackerPage = () => {
   // Utilisation de l'émotion actuelle
   const currentEmotion = emotionData[selectedEmotion];
 
+  const handleModify = () => {
+    // Redirige l'utilisateur vers la page de choix de l'émotion
+    navigation.navigate("Login"); //Changer "login" par le nom de la page de Kevin
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: currentEmotion.color }]}>
       <EmotionText emotion={currentEmotion.text} color={currentEmotion.textColor} />
       <Image source={currentEmotion.image} style={styles.image} />
+      <Button title="Modifier" onPress={handleModify}/>
     </View>
   );
 };
