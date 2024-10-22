@@ -1,7 +1,7 @@
 // import React from "react";
 // import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 
-// import Button from "../components/atoms/Button";
+// import BottomButton from "../components/atoms/BottomButton";
 // import EmotionTemplate from "../components/templates/EmotionTemplate";
 
 // const EmotionPage = () => {
@@ -19,7 +19,7 @@
 import React from 'react';
 import { View, StyleSheet, Image} from 'react-native';
 import EmotionText from '../components/atoms/EmotionText';
-import Button from "../components/atoms/Button";
+import BottomButton from "../components/atoms/BottomButton";
 
 
 const MoodTrackerPage = ({ navigation }) => {
@@ -89,7 +89,7 @@ const MoodTrackerPage = ({ navigation }) => {
     <View style={[styles.container, { backgroundColor: currentEmotion.color }]}>
       <EmotionText emotion={currentEmotion.text} color={currentEmotion.textColor} />
       <Image source={currentEmotion.image} style={styles.image} />
-      <Button title="Modifier" onPress={handleModify}/>
+      <BottomButton title="Modifier" onPress={handleModify}/>
     </View>
   );
 };
