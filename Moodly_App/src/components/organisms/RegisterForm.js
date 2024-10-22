@@ -6,7 +6,7 @@ import InputField from "../molecules/InputField";
 import Button from "../atoms/Button";
 import ButtonOr from "../atoms/ButtonOr";
 import LabeledPasswordInput from "../molecules/LabeledPasswordInput";
-import { globalStyles } from '../styles/globalStyles'; // Importez les styles globaux
+import { globalStyles } from '../styles/globalStyles';
 
 const RegisterPage = () => {
     const navigation = useNavigation();
@@ -24,7 +24,7 @@ const RegisterPage = () => {
     };
 
     const goToLogin = () => {
-        navigation.navigate("Login");
+        navigation.navigate("LoginPage");
     };
 
     return (

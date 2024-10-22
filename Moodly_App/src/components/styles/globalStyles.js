@@ -12,7 +12,6 @@ const loadFonts = async () => {
 const globalStyles = StyleSheet.create({
     container: {
         backgroundColor: '#f8f4f3',
-        padding: 20,
     },
     text: {
         fontFamily: 'Rubik',
