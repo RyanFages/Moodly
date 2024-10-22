@@ -23,9 +23,10 @@ const globalStyles = StyleSheet.create({
         borderRadius: 50,
         paddingVertical: 10,
         paddingHorizontal: 20,
-        backgroundColor: '#007BFF',
+        backgroundColor: '#3b2414',
         alignItems: 'center',
         justifyContent: 'center',
+        bottom: -150 ,
     },
 });
 

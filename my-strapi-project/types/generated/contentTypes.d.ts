@@ -19,6 +19,10 @@ export interface ApiFeelingFeeling extends Struct.CollectionTypeSchema {
     title: Schema.Attribute.String;
     date: Schema.Attribute.DateTime;
     contexte: Schema.Attribute.Boolean;
+    users_permissions_feelings: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -566,6 +570,7 @@ export interface PluginUsersPermissionsUser
     feeling: Schema.Attribute.Relation<'oneToOne', 'api::feeling.feeling'>;
     team: Schema.Attribute.Relation<'oneToOne', 'api::team.team'>;
     manager: Schema.Attribute.Relation<'oneToOne', 'api::manager.manager'>;
+    feelings: Schema.Attribute.Relation<'oneToMany', 'api::feeling.feeling'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
