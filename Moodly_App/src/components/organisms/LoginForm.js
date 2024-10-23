@@ -137,7 +137,6 @@ const LoginPage = () => {
             <Button
                 title={loading ? "Logging in..." : "Login"}
                 onPress={handleLogin}
-                style={globalStyles.button}
                 disabled={loading} // Désactive le bouton pendant le chargement
             />
                 <View style={styles.separatorContainer}>
@@ -145,7 +144,7 @@ const LoginPage = () => {
                 <Text style={styles.separatorText}>or</Text>
                 <View style={styles.separator} />
             </View>
-            <ButtonOr title="Register" onPress={goToRegister} style={globalStyles.button} />
+            <ButtonOr title="Register" onPress={goToRegister}/>
         </View>
     );
 };
