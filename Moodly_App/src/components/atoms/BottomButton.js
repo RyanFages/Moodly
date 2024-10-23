@@ -15,8 +15,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#3b2414',
         alignSelf: 'stretch',
         paddingVertical: 12,
-        // marginHorizontal: 24,
-        // marginLeft: '10%',
         borderRadius: 100, // Valeur par défaut pour les bords arrondis
         alignItems: 'center',
         justifyContent: 'center',

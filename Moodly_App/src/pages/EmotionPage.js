@@ -65,17 +65,19 @@ const MoodTrackerPage = ({ navigation }) => {
 
   const handleModify = () => {
     // Redirige l'utilisateur vers la page de choix de l'émotion
-    navigation.navigate("Login"); //Changer "login" par le nom de la page de Kevin
+    navigation.navigate("MoodWheel"); //Changer "login" par le nom de la page de Kevin
   };
 
   return (
     <View style={[styles.container, { backgroundColor: currentEmotion.color }]}>
+      {/* Top bar stays at the top */}
       <Header />
-      <View style={[styles.smallContainer]}>
+
+      {/* Centered content (text + image) */}
+      <View style={styles.centerContent}>
         <EmotionText emotion={currentEmotion.text} color={currentEmotion.textColor} />
         <Image source={currentEmotion.image} style={styles.image} />
-        <BottomButton title="Modifier" onPress={handleModify}/>
-
+        <BottomButton title="Modifier" onPress={handleModify} />
       </View>
     </View>
   );
@@ -84,23 +86,22 @@ const MoodTrackerPage = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between', // Space out top, center, and bottom
     alignItems: 'center',
   },
-  smallContainer: {
-    flex: 1,
-    justifyContent: 'center',
+  centerContent: {
     alignItems: 'center',
-    marginTop:-30,
-
+    justifyContent: 'center',
+    flex: 1, // Takes remaining space after top and bottom elements
+    marginTop: -100, // Moves content slightly higher on the screen
   },
   image: {
     width: 300,  // Set appropriate width for the image
     height: 300, // Set appropriate height for the image
     resizeMode: 'contain', // Ensure the image fits inside the box
-    marginTop:-30,
-    // position: 'absolute',
-  }
+    marginTop: -24, // Adds space between the text and image
+  },
+
 });
 
 export default MoodTrackerPage;
