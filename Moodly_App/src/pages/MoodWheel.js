@@ -5,7 +5,8 @@ import { Image as SvgImage } from 'react-native-svg'; // Importer le composant S
 import BottomButton from "../components/atoms/BottomButton";
 import Header from "../components/molecules/TopBar";
 
-import ArrowIcon from '../components/atoms/arrow.png'; // Importer l'icône de flèche
+// import ArrowIcon from '../components/atoms/arrow.png'; // Importer l'icône de flèche
+import ArrowIcon from '../../assets/images/arrow.png'; // Importer l'icône de flèche
 
 const { width } = Dimensions.get('window');
 const outerRadius = width; // Rayon de la roue
@@ -14,21 +15,29 @@ const centerX = 0;
 const centerY = 0;
 
 //Importation des PNG
-import Heureux from '../components/atoms/Mood/Heureux.png'
-import Motivé from '../components/atoms/Mood/Motivé.png'
-import Neutre from '../components/atoms/Mood/Neutre.png'
-import Triste from '../components/atoms/Mood/Triste.png'
-import Stressé from '../components/atoms/Mood/Stressé.png'
-import Colère from '../components/atoms/Mood/Colère.png'
-import Fatigué from '../components/atoms/Mood/Fatigué.png'
-import Frustré from '../components/atoms/Mood/Frustré.png'
+// import Heureux from '../components/atoms/Mood/Heureux.png'
+import Heureux from '../../assets/images/MoodHeureux.png'
+// import Motivé from '../components/atoms/Mood/Motivé.png'
+import Motivé from '../../assets/images/MoodMotive.png'
+// import Neutre from '../components/atoms/Mood/Neutre.png'
+import Neutre from '../../assets/images/MoodNeutre.png'
+// import Triste from '../components/atoms/Mood/Triste.png'
+import Triste from '../../assets/images/MoodTriste.png'
+// import Stressé from '../components/atoms/Mood/Stressé.png'
+import Stressé from '../../assets/images/MoodStresse.png'
+// import Énervé from '../components/atoms/Mood/Colère.png'
+import Énervé from '../../assets/images/MoodEnerve.png'
+// import Fatigué from '../components/atoms/Mood/Fatigué.png'
+import Fatigué from '../../assets/images/MoodFatigue.png'
+// import Frustré from '../components/atoms/Mood/Frustré.png'
+import Frustré from '../../assets/images/MoodFrustre.png'
 
 // Liste des émotions
 const emotions = [
   { label: 'Fatigué', color: '#9E76D6', icon : Fatigué },
   { label: 'Frustré', color: '#2EBB6E', icon : Frustré },
   { label: 'Stressé', color: '#F68A37', icon : Stressé },
-  { label: 'Énervé', color: '#FF4545', icon : Colère },
+  { label: 'Énervé', color: '#FF4545', icon : Énervé },
   { label: 'Motivé', color: '#FF94BD', icon : Motivé },
   { label: 'Heureux', color: '#FFDD30', icon : Heureux },
   { label: 'Neutre', color: '#B0B0B0', icon : Neutre },
@@ -165,8 +174,10 @@ const EmotionWheel = ({navigation}) => {
         style={{
           position: 'absolute',
           zIndex: 1,
-          left: '39%', // Centrer horizontalement
+          left: '39.25%', // Centrer horizontalement
           top: '-12%', // Centrer verticalement
+          width:'11%',
+          height:'20%',
         }}
       />
     );
