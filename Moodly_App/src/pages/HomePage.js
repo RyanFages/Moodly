@@ -8,6 +8,10 @@ const HomePage = ({ navigation }) => {
         // Redirige l'utilisateur vers la page de connexion
         navigation.navigate("Login");
     };
+    const MoodWhell = () => {
+        // Redirige l'utilisateur vers la page de connexion
+        navigation.navigate("MoodWhell");
+    };
 
     return (
         <View style={styles.container}>
@@ -21,6 +25,8 @@ const HomePage = ({ navigation }) => {
                 title="Manager Dashboard"
                 onPress={() => navigation.navigate("ManagerDashboard")}
             />
+            <Button title="MoodWhell" onPress={MoodWhell} />
+
         </View>
     );
 };

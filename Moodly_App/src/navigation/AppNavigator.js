@@ -7,6 +7,7 @@ import HomePage from "../pages/HomePage";
 import EmotionPage from "../pages/EmotionPage";
 import RegisterPage from "../pages/RegisterPage";
 import ManagerDashboardPage from "../pages/ManagerDashboardPage";
+import MoodWhell from "../pages/MoodWhell";
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +39,11 @@ const AppNavigator = () => {
                     name="ManagerDashboard"
                     component={ManagerDashboardPage}
                     options={{ title: "Manager Dashboard" }}
+                />
+                <Stack.Screen
+                    name="MoodWhell"
+                    component={MoodWhell}
+                    options={{ title: "MoodWhell" }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
