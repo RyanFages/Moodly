@@ -14,6 +14,7 @@ const HomePage = ({ navigation }) => {
             <Text style={styles.text}>Welcome to the Home Page!</Text>
             <Button title="Logout" onPress={handleLogout} />
             <Button title="Emotion" onPress={navigation.navigate("EmotionPage")} />
+            <Button title="Manager Dashboard" onPress={() => navigation.navigate("ManagerDashboard")} />
         </View>
     );
 };

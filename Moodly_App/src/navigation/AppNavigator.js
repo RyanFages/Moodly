@@ -6,13 +6,14 @@ import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
 import EmotionPage from "../pages/EmotionPage";
 import RegisterPage from "../pages/RegisterPage";
+import ManagerDashboardPage from "../pages/ManagerDashboardPage";
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
+            <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
                 <Stack.Screen
                     name="Login"
                     component={LoginPage}
@@ -32,6 +33,11 @@ const AppNavigator = () => {
                     name="RegisterPage"
                     component={RegisterPage}
                     options={{ title: "RegisterPage" }}
+                />
+                <Stack.Screen
+                    name="ManagerDashboard"
+                    component={ManagerDashboardPage}
+                    options={{ title: "Manager Dashboard" }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
