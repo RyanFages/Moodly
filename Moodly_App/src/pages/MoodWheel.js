@@ -2,6 +2,8 @@ import React, {useState, useRef, useEffect} from 'react';
 import { View, Text, StyleSheet, Dimensions, Animated, PanResponder, Image } from 'react-native';
 import Svg, { G, Path } from 'react-native-svg';
 import { Image as SvgImage } from 'react-native-svg'; // Importer le composant SVG pour l'image
+import BottomButton from "../components/atoms/BottomButton";
+import Header from "../components/molecules/TopBar";
 
 import ArrowIcon from '../components/atoms/arrow.png'; // Importer l'icône de flèche
 
@@ -26,7 +28,7 @@ const emotions = [
   { label: 'Fatigué', color: '#9E76D6', icon : Fatigué },
   { label: 'Frustré', color: '#2EBB6E', icon : Frustré },
   { label: 'Stressé', color: '#F68A37', icon : Stressé },
-  { label: 'En Colère', color: '#FF4545', icon : Colère },
+  { label: 'Énervé', color: '#FF4545', icon : Colère },
   { label: 'Motivé', color: '#FF94BD', icon : Motivé },
   { label: 'Heureux', color: '#FFDD30', icon : Heureux },
   { label: 'Neutre', color: '#B0B0B0', icon : Neutre },
@@ -42,7 +44,7 @@ const calculateAngle = (x, y) => {
   return angle;
 };
 
-const EmotionWheel = () => {
+const EmotionWheel = ({navigation}) => {
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [selectedColor, setSelectedColor] = useState('#000'); // Couleur de l'émotion sélectionnée
 
@@ -169,9 +171,14 @@ const EmotionWheel = () => {
       />
     );
   };
-
+  const handleConfirm = () => {
+    navigation.navigate("EmotionPage",{ selectedEmotion });
+  };
   return (
     <View style={styles.container}>
+      <Header />
+    <View style={styles.container}>
+      
       <Text style={styles.text}>Aujourd'hui je me sens</Text>
       <Text style={[styles.centeredEmotionText, { color: selectedColor }]}>
         {selectedEmotion}
@@ -192,6 +199,9 @@ const EmotionWheel = () => {
           </Svg>
         </Animated.View>
       </View>
+        <BottomButton title="Valider" onPress={handleConfirm} />
+    </View>
+
     </View>
   );
 };
