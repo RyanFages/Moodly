@@ -9,22 +9,27 @@ import RegisterPage from "../pages/RegisterPage";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-    return (
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
-                <Stack.Screen
-                    name="LoginPage"
-                    component={LoginPage}
-                    options={{ title: "LoginPage" }}
-                />
-                <Stack.Screen
-                    name="RegisterPage"
-                    component={RegisterPage}
-                    options={{ title: "RegisterPage" }}
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+          name="LoginPage"
+          component={LoginPage}
+          options={{ title: "LoginPage" }}
+        />
+        <Stack.Screen
+          name="RegisterPage"
+          component={RegisterPage}
+          options={{ title: "RegisterPage" }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={HomePage}
+          options={{ title: "HomePage" }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
 
 export default AppNavigator;
