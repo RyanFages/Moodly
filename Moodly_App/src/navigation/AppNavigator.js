@@ -8,17 +8,26 @@ import EmotionPage from "../pages/EmotionPage";
 import RegisterPage from "../pages/RegisterPage";
 import ManagerDashboardPage from "../pages/ManagerDashboardPage";
 import MoodWheel from "../pages/MoodWheel";
+import LoginCallback from "../pages/LoginCallback";
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+            <Stack.Navigator
+                initialRouteName="Home"
+                screenOptions={{ headerShown: false }}
+            >
                 <Stack.Screen
                     name="Login"
                     component={LoginPage}
                     options={{ title: "Login" }}
+                />
+                <Stack.Screen
+                    namee="LoginCallback"
+                    component={LoginCallback}
+                    options={{ title: "LoginCallback" }}
                 />
                 <Stack.Screen
                     name="Home"

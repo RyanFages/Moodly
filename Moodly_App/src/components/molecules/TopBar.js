@@ -1,13 +1,19 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import ButtonLogout from "../atoms/ButtonLogout";
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+
+import { logoutUser } from '../../../src/store/UserSlice';
+import ButtonLogout from "../atoms/ButtonLogout";
 
 const Header = () => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
 
     // Fonction pour gérer la déconnexion
     const handleLogout = () => {
+        // Supprime l'utilisateur de la session
+        dispatch(logoutUser());
         // Redirige l'utilisateur vers la page de login (ou toute autre page)
         navigation.navigate("Login"); // Change "Login" selon le nom de ta page
     };
