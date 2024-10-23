@@ -1,16 +1,7 @@
 import React from "react";
 import { View, Alert } from "react-native";
-import Svg, { Rect, Text as SvgText } from "react-native-svg";
+import Svg, { Rect, Text as SvgText, Pattern, Line } from "react-native-svg";
 import { treemap, hierarchy } from "d3-hierarchy";
-import { timeDay } from "d3-time";
-
-// Fonction pour calculer le poids basé sur la récence (jours depuis aujourd'hui)
-function calculateWeight(date) {
-    const today = new Date();
-    const entryDate = new Date(date);
-    const diffDays = timeDay.count(entryDate, today);
-    return Math.max(5 - diffDays, 1); // Plus récent = plus important, minimum 1
-}
 
 // Préparer les données pour le TreeMap : Emotion > Dates
 function prepareData(data) {
@@ -30,25 +21,39 @@ function prepareData(data) {
             );
 
             if (dateIndex > -1) {
+                if (curr.Personal) {
+                    acc[curr.Mood].children[dateIndex].personalValue += 1;
+                } else {
+                    acc[curr.Mood].children[dateIndex].nonPersonalValue += 1;
+                }
                 acc[curr.Mood].children[dateIndex].value += 1;
             } else {
                 acc[curr.Mood].children.push({
                     name: today,
                     value: 1,
+                    personalValue: curr.Personal ? 1 : 0,
+                    nonPersonalValue: curr.Personal ? 0 : 1,
                 });
             }
         } else {
-            // Regrouper les autres jours dans une case "Autres jours"
             const otherIndex = acc[curr.Mood].children.findIndex(
                 (d) => d.name === "Autres jours"
             );
 
             if (otherIndex > -1) {
+                // Mise à jour pour inclure la distinction de Personal
+                if (curr.Personal) {
+                    acc[curr.Mood].children[otherIndex].personalValue += 1;
+                } else {
+                    acc[curr.Mood].children[otherIndex].nonPersonalValue += 1;
+                }
                 acc[curr.Mood].children[otherIndex].value += 1;
             } else {
                 acc[curr.Mood].children.push({
                     name: "Autres jours",
                     value: 1,
+                    personalValue: curr.Personal ? 1 : 0,
+                    nonPersonalValue: curr.Personal ? 0 : 1,
                 });
             }
         }
@@ -62,7 +67,6 @@ function prepareData(data) {
 
 const TreeMapChart = ({ data, width, height }) => {
     const treeData = prepareData(data);
-    const Today = new Date().toISOString().split("T")[0];
 
     // Créer la hiérarchie du TreeMap
     const root = hierarchy(treeData)
@@ -85,10 +89,11 @@ const TreeMapChart = ({ data, width, height }) => {
     };
 
     // Fonction pour gérer le clic sur un rectangle
-    const handlePress = (mood, date, value) => {
+    const handlePress = (mood, date, value, isPersonal) => {
+        const personalText = isPersonal ? "Personnel" : "Non personnel";
         Alert.alert(
             `${date}`,
-            `Sentiment : ${mood}\nNombre d'employés: ${value}`,
+            `Sentiment : ${mood}\nNombre d'employés: ${value}\nType: ${personalText}`,
             [{ text: "OK" }]
         );
     };
@@ -96,49 +101,101 @@ const TreeMapChart = ({ data, width, height }) => {
     return (
         <View>
             <Svg width={width} height={height}>
+                {/* Définir un motif pour les hachures */}
+                <Pattern
+                    id="hachures"
+                    patternUnits="userSpaceOnUse"
+                    width="10"
+                    height="10"
+                >
+                    <Line
+                        x1="0"
+                        y1="0"
+                        x2="10"
+                        y2="10"
+                        stroke="black"
+                        strokeWidth="1"
+                    />
+                </Pattern>
                 {root.leaves().map((leaf, index) => {
-                    const isOther = leaf.data.name === "Autres jours"; // Vérifier si c'est le groupe des autres jours
+                    const total = leaf.data.value;
+                    const personalValue = leaf.data.personalValue || 0;
+                    const nonPersonalValue = leaf.data.nonPersonalValue || 0;
+
+                    // Calculer les dimensions des subdivisions
+                    const height = leaf.y1 - leaf.y0;
+                    const personalHeight = (personalValue / total) * height;
+                    const nonPersonalHeight =
+                        (nonPersonalValue / total) * height;
+
+                    // Coordonnées Y pour chaque subdivision
+                    const nonPersonalY = leaf.y0;
+                    const personalY = leaf.y0 + nonPersonalHeight;
+
+                    // Couleur de fond pour les hachures
+                    const fillColor = emotionColors[leaf.parent.data.name];
 
                     return (
                         <React.Fragment key={index}>
+                            {/* Case pour non-personal */}
                             <Rect
                                 x={leaf.x0}
-                                y={leaf.y0}
+                                y={nonPersonalY}
                                 width={leaf.x1 - leaf.x0}
-                                height={leaf.y1 - leaf.y0}
-                                fill={emotionColors[leaf.parent.data.name]}
+                                height={nonPersonalHeight}
+                                fill={fillColor}
                                 stroke="white"
                                 onPress={() =>
                                     handlePress(
                                         leaf.parent.data.name,
                                         leaf.data.name,
-                                        leaf.value
+                                        nonPersonalValue,
+                                        false // Non personnel
                                     )
                                 }
                             />
-                            <SvgText
-                                x={leaf.x0 + (leaf.x1 - leaf.x0) / 2}
-                                y={leaf.y0 + (leaf.y1 - leaf.y0) / 2}
-                                fontSize="10"
-                                fill="black"
-                                textAnchor="middle"
-                                alignmentBaseline="middle"
-                            >
-                                {leaf.parent.data.name}
-                            </SvgText>
-                            {/* Afficher "Autres jours" pour les jours regroupés */}
-                            {isOther ? (
+                            {/* Texte centré pour la section non personnelle */}
+                            {nonPersonalValue > 0 && (
                                 <SvgText
                                     x={leaf.x0 + (leaf.x1 - leaf.x0) / 2}
-                                    y={leaf.y0 + (leaf.y1 - leaf.y0) / 2 + 10}
+                                    y={nonPersonalY + nonPersonalHeight / 2}
                                     fontSize="10"
                                     fill="black"
                                     textAnchor="middle"
                                     alignmentBaseline="middle"
                                 >
-                                    Autres jours
+                                    {leaf.parent.data.name}
                                 </SvgText>
-                            ) : null}
+                            )}
+
+                            {/* Case pour personal avec hachures superposées */}
+                            <Rect
+                                x={leaf.x0}
+                                y={personalY}
+                                width={leaf.x1 - leaf.x0}
+                                height={personalHeight}
+                                fill={fillColor} // Remplir avec la couleur de base
+                                stroke="white"
+                                onPress={() =>
+                                    handlePress(
+                                        leaf.parent.data.name,
+                                        leaf.data.name,
+                                        personalValue,
+                                        true // Personnel
+                                    )
+                                }
+                            />
+                            {/* Superposition des hachures */}
+                            {personalValue > 0 && (
+                                <Rect
+                                    x={leaf.x0}
+                                    y={personalY}
+                                    width={leaf.x1 - leaf.x0}
+                                    height={personalHeight}
+                                    fill="url(#hachures)" // Superposer avec des hachures
+                                    pointerEvents="none" // Ignorer les clics sur cette superposition
+                                />
+                            )}
                         </React.Fragment>
                     );
                 })}
