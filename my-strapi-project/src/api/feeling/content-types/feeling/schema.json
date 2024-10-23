@@ -4,7 +4,7 @@
   "info": {
     "singularName": "feeling",
     "pluralName": "feelings",
-    "displayName": "Feeling",
+    "displayName": "Mood",
     "description": ""
   },
   "options": {
@@ -23,7 +23,7 @@
         "audios"
       ]
     },
-    "title": {
+    "title_mood": {
       "type": "string"
     },
     "date": {

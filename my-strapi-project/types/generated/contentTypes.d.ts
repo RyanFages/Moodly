@@ -5,7 +5,7 @@ export interface ApiFeelingFeeling extends Struct.CollectionTypeSchema {
   info: {
     singularName: 'feeling';
     pluralName: 'feelings';
-    displayName: 'Feeling';
+    displayName: 'Mood';
     description: '';
   };
   options: {
@@ -16,7 +16,7 @@ export interface ApiFeelingFeeling extends Struct.CollectionTypeSchema {
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
-    title: Schema.Attribute.String;
+    title_mood: Schema.Attribute.String;
     date: Schema.Attribute.DateTime;
     contexte: Schema.Attribute.Boolean;
     users_permissions_feelings: Schema.Attribute.Relation<
@@ -79,7 +79,7 @@ export interface ApiTeamTeam extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    manager: Schema.Attribute.Relation<'oneToOne', 'api::manager.manager'>;
+    owner_team: Schema.Attribute.Relation<'oneToOne', 'api::manager.manager'>;
     user_in_teams: Schema.Attribute.Relation<
       'oneToMany',
       'plugin::users-permissions.user'
