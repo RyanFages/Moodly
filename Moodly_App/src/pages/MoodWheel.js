@@ -28,7 +28,7 @@ const emotions = [
   { label: 'Fatigué', color: '#9E76D6', icon : Fatigué },
   { label: 'Frustré', color: '#2EBB6E', icon : Frustré },
   { label: 'Stressé', color: '#F68A37', icon : Stressé },
-  { label: 'En Colère', color: '#FF4545', icon : Colère },
+  { label: 'Énervé', color: '#FF4545', icon : Colère },
   { label: 'Motivé', color: '#FF94BD', icon : Motivé },
   { label: 'Heureux', color: '#FFDD30', icon : Heureux },
   { label: 'Neutre', color: '#B0B0B0', icon : Neutre },
@@ -172,7 +172,7 @@ const EmotionWheel = ({navigation}) => {
     );
   };
   const handleConfirm = () => {
-    navigation.navigate("EmotionPage");
+    navigation.navigate("EmotionPage",{ selectedEmotion });
   };
   return (
     <View style={styles.container}>

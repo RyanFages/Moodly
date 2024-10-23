@@ -5,9 +5,10 @@ import BottomButton from "../components/atoms/BottomButton";
 import Header from "../components/molecules/TopBar";
 
 
-const MoodTrackerPage = ({ navigation }) => {
+const MoodTrackerPage = ({ navigation , route}) => {
   // Choisis ici l'émotion que tu veux afficher
-  const selectedEmotion = 'heureux'; // Change cette valeur pour tester d'autres émotions
+  const { selectedEmotion } = route.params; // Récupérer l'émotion passée
+  // const selectedEmotion = 'heureux'; // Change cette valeur pour tester d'autres émotions
 
   const emotionData = {
     'heureux': {
@@ -61,7 +62,9 @@ const MoodTrackerPage = ({ navigation }) => {
   };
 
   // Utilisation de l'émotion actuelle
-  const currentEmotion = emotionData[selectedEmotion];
+  // const currentEmotion = emotionData[selectedEmotion];
+  const currentEmotion = emotionData[selectedEmotion.toLowerCase()]; // Convertir l'émotion en minuscules pour la clé
+
 
   const handleModify = () => {
     // Redirige l'utilisateur vers la page de choix de l'émotion
