@@ -149,9 +149,27 @@ const LoginPage = () => {
             // Stocker le token et l'utilisateur dans AsyncStorage
             await AsyncStorage.setItem("token", jwt);  // Stocker le token JWT
             await AsyncStorage.setItem("user", JSON.stringify(user));  // Stocker les informations utilisateur
+            try {
+                const response = await axios.get(
+                    "http://10.134.197.209:1337/api/users/me?populate=*",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${jwt}`,
+                        },
+                    }
+                );
+                const role = response.data.role.name;
+                if (role === "Manager") {
+                    navigation.navigate("ManagerDashboard");
+                } else {
+                    navigation.navigate("MoodWheel");
+                }
+            } catch (error) {
+                console.log("An error occurred:", error.response);
+                return null;
+            }
 
             // Rediriger vers la page d'accueil après la connexion réussie
-            navigation.navigate("MoodWheel");
 
         } catch (error) {
             console.log('An error occurred:', error.response);
