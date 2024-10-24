@@ -144,7 +144,7 @@ const RegisterPage = () => {
     };
 
     return (
-        <View style={globalStyles.container}>
+        <View>
             <Image
                 source={{
                     uri: "https://st2.depositphotos.com/3096625/7785/v/380/depositphotos_77856480-stock-illustration-letter-m-logo.jpg",

@@ -49,9 +49,9 @@ const LoginPage = () => {
     };
 
     return (
-        <View style={globalStyles.container}>
+        <View>
             <Image
-                source={{ uri: 'https://st2.depositphotos.com/3096625/7785/v/380/depositphotos_77856480-stock-illustration-letter-m-logo.jpg' }}
+                source={require('../../../assets/icon.png')}
                 style={styles.image}
             />
             <Text style={globalStyles.title}>Login</Text>
@@ -74,7 +74,7 @@ const LoginPage = () => {
                 onPress={handleLogin}
                 disabled={loading} // Désactive le bouton pendant le chargement
             />
-                <View style={styles.separatorContainer}>
+            <View style={styles.separatorContainer}>
                 <View style={styles.separator} />
                 <Text style={styles.separatorText}>or</Text>
                 <View style={styles.separator} />
@@ -82,6 +82,7 @@ const LoginPage = () => {
             <ButtonOr title="Register" onPress={goToRegister} />
         </View>
     );
+    
 };
 
 //Séparateur simple sans le or L.51/55 <Button title="Login" onPress={handleLogin} style={globalStyles.button} /> <Button title="Register" onPress={goToRegister} style={[globalStyles.button, { marginTop: 10 }]} />
