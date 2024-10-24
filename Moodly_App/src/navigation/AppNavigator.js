@@ -24,11 +24,7 @@ const AppNavigator = () => {
                     component={LoginPage}
                     options={{ title: "Login" }}
                 />
-                <Stack.Screen
-                    namee="LoginCallback"
-                    component={LoginCallback}
-                    options={{ title: "LoginCallback" }}
-                />
+                <Stack.Screen name="LoginCallback" component={LoginCallback} />
                 <Stack.Screen
                     name="Home"
                     component={HomePage}
