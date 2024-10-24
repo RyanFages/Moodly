@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     // marginBottom: 50,
-    position:'absolute',
-    top:150,
+    // position:'absolute',
+    // top:20,
 
   },
   mainText: {

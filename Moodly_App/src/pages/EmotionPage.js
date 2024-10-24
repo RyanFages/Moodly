@@ -87,20 +87,19 @@ const MoodTrackerPage = ({ navigation , route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   centerContent: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    marginTop: -100,
+    marginTop: -260,
   },
   image: {
     width: 300,
     height: 300,
     resizeMode: 'contain',
-    marginTop: -24,
+    marginTop: 25,
   },
 
 });
