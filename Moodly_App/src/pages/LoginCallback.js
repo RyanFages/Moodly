@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import GetUserMood from "../components/atoms/GetUSerMood";
 
 const getRole = async ({ jwt }) => {
     try {
@@ -30,20 +31,11 @@ const LoginCallback = async ({ jwt, user }) => {
     if (role === "manager") {
         navigation.navigate("ManagerDashboard");
     } else {
-        try {
-            const response = await axios.get(
-                "http://10.134.197.209:1337/api/",
-                {
-                    headers: {
-                        Authorization: `Bearer ${jwt}`,
-                        userID: user.id,
-                    },
-                }
-            );
-            const emotion = response.data;
-            navigation.navigate("EmotionPage", { emotion });
-        } catch (error) {
-            console.log("An error occurred:", error.response);
+        const mood = GetUserMood();
+        if (mood === null) {
+            navigation.navigate("MoodWheel");
+        } else {
+            navigation.navigate("EmotionPage", { mood });
         }
     }
 };
