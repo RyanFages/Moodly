@@ -4,6 +4,9 @@ import Svg, { Rect, Text as SvgText, Pattern, Line } from "react-native-svg"; //
 import { treemap, hierarchy } from "d3-hierarchy";
 import Header from "../../components/molecules/TopBar";
 import Button from "../atoms/BottomButton";
+import { useNavigation } from "@react-navigation/native";
+
+
 
 
 // Préparer les données pour le TreeMap : Emotion > Dates
@@ -69,6 +72,7 @@ function prepareData(data) {
 }
 
 const TreeMapChart = ({ data, width, height }) => {
+    const navigation = useNavigation();
     const treeData = prepareData(data);
 
     // Créer la hiérarchie du TreeMap
@@ -101,7 +105,7 @@ const TreeMapChart = ({ data, width, height }) => {
         );
     };
 
-    const goToManagerList = () => {
+    const Manager = () => {
         navigation.navigate("ManagerList");
     };
 
@@ -213,14 +217,14 @@ const TreeMapChart = ({ data, width, height }) => {
             </Svg>
             <View style={styles.buttonContainer}>
                 <Button
-                    title="Aller à la liste des managers"
-                    onPress={(goToManagerList)}
+                    title="Aller à la liste des employees"
+                    onPress={(Manager)}
                 />
             </View>
         </View>
     );
 };
-
+    
 const styles = StyleSheet.create({
     container: {
         flex: 0.9,
@@ -232,8 +236,8 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     buttonContainer: {
-//        alignSelf: '30',
-        paddingHorizontal: 20,
+        marginLeft: '10%', // Décale le bouton de 20 unités vers la droite
+        paddingHorizontal: 10,
         bottom: -90,
     },
 });
