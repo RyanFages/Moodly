@@ -229,6 +229,8 @@ const normalizeAngleAndSetEmotion = () => {
       
       // Configurer l'URL de votre API Strapi
       const apiUrl = 'http://10.134.197.209:1337/api/feelings'; 
+
+      // Verifier si une entrée existe déjà pour l'utilisateur aujourd'hui
       
       // Envoyer la requête POST à Strapi
       const response = await axios.post(apiUrl, moodData, {
