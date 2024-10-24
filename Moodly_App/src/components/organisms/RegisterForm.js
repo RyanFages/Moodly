@@ -146,9 +146,7 @@ const RegisterPage = () => {
     return (
         <View>
             <Image
-                source={{
-                    uri: "https://st2.depositphotos.com/3096625/7785/v/380/depositphotos_77856480-stock-illustration-letter-m-logo.jpg",
-                }}
+                source={require('../../../assets/images/logo.png')}
                 style={styles.image}
             />
             <Text style={globalStyles.title}>Register</Text>
@@ -190,6 +188,8 @@ const styles = StyleSheet.create({
         height: 100,
         marginBottom: 20,
         alignSelf: "center",
+        borderRadius:16,
+
     },
     separatorContainer: {
         flexDirection: "row",

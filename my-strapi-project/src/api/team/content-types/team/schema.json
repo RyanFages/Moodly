@@ -12,12 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "owner_team": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::manager.manager",
-      "inversedBy": "team"
-    },
     "user_in_teams": {
       "type": "relation",
       "relation": "oneToMany",
