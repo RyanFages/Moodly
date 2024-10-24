@@ -1,7 +1,10 @@
 import React from "react";
-import { View, Alert } from "react-native";
-import Svg, { Rect, Text as SvgText, Pattern, Line } from "react-native-svg";
+import { View, Alert, StyleSheet, Text } from "react-native"; // Importer Text depuis react-native
+import Svg, { Rect, Text as SvgText, Pattern, Line } from "react-native-svg"; // Renommer Text en SvgText
 import { treemap, hierarchy } from "d3-hierarchy";
+import Header from "../../components/molecules/TopBar";
+import Button from "../atoms/BottomButton";
+
 
 // Préparer les données pour le TreeMap : Emotion > Dates
 function prepareData(data) {
@@ -98,8 +101,16 @@ const TreeMapChart = ({ data, width, height }) => {
         );
     };
 
+    const goToManagerList = () => {
+        navigation.navigate("ManagerList");
+    };
+
     return (
-        <View>
+        <View style={styles.container}>
+            <Header />
+
+            <Text style={styles.title}>Mon Équipe</Text>
+
             <Svg width={width} height={height}>
                 {/* Définir un motif pour les hachures */}
                 <Pattern
@@ -200,8 +211,31 @@ const TreeMapChart = ({ data, width, height }) => {
                     );
                 })}
             </Svg>
+            <View style={styles.buttonContainer}>
+                <Button
+                    title="Aller à la liste des managers"
+                    onPress={(goToManagerList)}
+                />
+            </View>
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 0.9,
+        justifyContent: "space-between",
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+    buttonContainer: {
+//        alignSelf: '30',
+        paddingHorizontal: 20,
+        bottom: -90,
+    },
+});
 
 export default TreeMapChart;

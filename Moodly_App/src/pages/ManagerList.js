@@ -77,7 +77,9 @@ const ManagerList = () => {
           </View>
         )}
       </ScrollView>
-      <Button style={styles.center} title="Ajouter une personne à l'équipe" onPress={() => setModalVisible(true)} />
+      <View style={styles.buttonContainer}>
+        <Button style={styles.centeredButton} title="Ajouter une personne à l'équipe" onPress={() => setModalVisible(true)} />
+      </View>
       
       <Modal
         animationType="slide"
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   center: {
-    alignSelf: 'center',
+    alignItems: "center",
   },
   container: {
     flex: 1,
@@ -215,8 +217,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%'
+    justifyContent: 'center',
+    width: '100%',
   }
 });
 
