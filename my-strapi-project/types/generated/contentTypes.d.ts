@@ -5,22 +5,18 @@ export interface ApiFeelingFeeling extends Struct.CollectionTypeSchema {
   info: {
     singularName: 'feeling';
     pluralName: 'feelings';
-    displayName: 'Mood';
+    displayName: 'Feeling';
     description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    Emoticone: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
-      true
-    >;
     title_mood: Schema.Attribute.String;
     date: Schema.Attribute.DateTime;
     contexte: Schema.Attribute.Boolean;
-    users_permissions_feelings: Schema.Attribute.Relation<
-      'manyToOne',
+    users_permissions_user: Schema.Attribute.Relation<
+      'oneToOne',
       'plugin::users-permissions.user'
     >;
     createdAt: Schema.Attribute.DateTime;
@@ -38,35 +34,6 @@ export interface ApiFeelingFeeling extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiManagerManager extends Struct.CollectionTypeSchema {
-  collectionName: 'managers';
-  info: {
-    singularName: 'manager';
-    pluralName: 'managers';
-    displayName: 'Manager';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    identifiant: Schema.Attribute.Email;
-    password: Schema.Attribute.Password;
-    team: Schema.Attribute.Relation<'oneToOne', 'api::team.team'>;
-    createdAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    publishedAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::manager.manager'
-    >;
-  };
-}
-
 export interface ApiTeamTeam extends Struct.CollectionTypeSchema {
   collectionName: 'teams';
   info: {
@@ -79,7 +46,6 @@ export interface ApiTeamTeam extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    owner_team: Schema.Attribute.Relation<'oneToOne', 'api::manager.manager'>;
     user_in_teams: Schema.Attribute.Relation<
       'oneToMany',
       'plugin::users-permissions.user'
@@ -569,7 +535,6 @@ export interface PluginUsersPermissionsUser
     >;
     feeling: Schema.Attribute.Relation<'oneToOne', 'api::feeling.feeling'>;
     team: Schema.Attribute.Relation<'oneToOne', 'api::team.team'>;
-    manager: Schema.Attribute.Relation<'oneToOne', 'api::manager.manager'>;
     feelings: Schema.Attribute.Relation<'oneToMany', 'api::feeling.feeling'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
@@ -952,7 +917,6 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ContentTypeSchemas {
       'api::feeling.feeling': ApiFeelingFeeling;
-      'api::manager.manager': ApiManagerManager;
       'api::team.team': ApiTeamTeam;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;

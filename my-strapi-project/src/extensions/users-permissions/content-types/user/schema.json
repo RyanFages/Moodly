@@ -75,16 +75,10 @@
       "relation": "oneToOne",
       "target": "api::team.team"
     },
-    "manager": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::manager.manager"
-    },
     "feelings": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::feeling.feeling",
-      "mappedBy": "users_permissions_feelings"
+      "target": "api::feeling.feeling"
     }
   }
 }

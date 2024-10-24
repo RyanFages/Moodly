@@ -4,7 +4,7 @@
   "info": {
     "singularName": "feeling",
     "pluralName": "feelings",
-    "displayName": "Mood",
+    "displayName": "Feeling",
     "description": ""
   },
   "options": {
@@ -12,17 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "Emoticone": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
     "title_mood": {
       "type": "string"
     },
@@ -32,11 +21,10 @@
     "contexte": {
       "type": "boolean"
     },
-    "users_permissions_feelings": {
+    "users_permissions_user": {
       "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "feelings"
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }

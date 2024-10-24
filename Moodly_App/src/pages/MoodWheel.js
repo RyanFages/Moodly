@@ -4,6 +4,11 @@ import Svg, { G, Path } from 'react-native-svg';
 import { Image as SvgImage } from 'react-native-svg'; // Importer le composant SVG pour l'image
 import BottomButton from "../components/atoms/BottomButton";
 import Header from "../components/molecules/TopBar";
+import axios from 'axios';  // Importer Axios
+import AsyncStorage from '@react-native-async-storage/async-storage';  // Pour gérer les tokens JWT
+import jwtDecode from 'jwt-decode';
+
+
 
 // import ArrowIcon from '../components/atoms/arrow.png'; // Importer l'icône de flèche
 import ArrowIcon from '../../assets/images/arrow.png'; // Importer l'icône de flèche
@@ -32,7 +37,7 @@ import Fatigué from '../../assets/images/MoodFatigue.png'
 // import Frustré from '../components/atoms/Mood/Frustré.png'
 import Frustré from '../../assets/images/MoodFrustre.png'
 
-// Liste des émotions
+// Liste des émotions, match des emotions 
 const emotions = [
   { label: 'Fatigué', color: '#9E76D6', icon : Fatigué },
   { label: 'Frustré', color: '#2EBB6E', icon : Frustré },
@@ -182,9 +187,89 @@ const EmotionWheel = ({navigation}) => {
       />
     );
   };
-  const handleConfirm = () => {
-    navigation.navigate("EmotionPage",{ selectedEmotion });
+  
+    
+  const handleConfirm = async () => {
+    try {
+      // Récupérer le token JWT et l'utilisateur depuis le stockage (si l'utilisateur est connecté)
+      const token = await AsyncStorage.getItem('token');
+      const userString = await AsyncStorage.getItem('user');
+      const user = JSON.parse(userString);  // Convertir la chaîne JSON en objet
+
+      // Créer un objet contenant les données à envoyer
+      const moodData = {
+        data: {
+          title_mood: selectedEmotion,   // L'émotion sélectionnée
+          date: new Date().toISOString(),  // Format ISO pour la date actuelle
+          users_permissions_user: user.id  // Utiliser l'ID de l'utilisateur pour la relation
+        }
+      };
+      
+      // Afficher les données dans la console pour débogage
+      console.log("Données envoyées :", JSON.stringify(moodData));
+      
+      // Configurer l'URL de votre API Strapi
+      const apiUrl = 'http://10.134.197.209:1337/api/feelings'; 
+      
+      // Envoyer la requête POST à Strapi
+      const response = await axios.post(apiUrl, moodData, {
+        headers: {
+          Authorization: `Bearer ${token}`,  // Ajouter le token JWT dans les en-têtes
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      if (response.status === 200 || response.status === 201) {
+        console.log('Données sauvegardées avec succès !');
+        // Rediriger vers la page souhaitée après succès
+        navigation.navigate("EmotionPage", { selectedEmotion });
+      } else {
+        console.error('Erreur lors de l\'enregistrement des données : ', response.statusText);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la requête :', error);
+      // Gérer l'erreur ou rediriger même en cas d'erreur
+      navigation.navigate("EmotionPage", { selectedEmotion });
+    }
   };
+
+
+
+  // const handleConfirm = async () => {
+  //   try {
+  //     // Récupérer le token JWT depuis le stockage (si l'utilisateur est connecté)
+  //     const token = await AsyncStorage.getItem('token');
+      
+  //     // Créer un objet contenant les données à envoyer
+  //     const moodData = {
+  //       title_mood: selectedEmotion,   // L'émotion sélectionnée
+  //       date: new Date(),              // La date actuelle
+  //       user: 1,  // ID utilisateur - à ajuster selon la gestion de vos utilisateurs
+  //     };
+      
+  //     // Configurer l'URL de votre API Strapi (assurez-vous que l'URL soit correcte)
+  //     const apiUrl = 'http://10.134.197.209:1337/api/feelings'; 
+      
+  //     // Envoyer la requête POST à Strapi
+  //     const response = await axios.post(apiUrl, moodData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,  // Ajouter le token JWT dans les en-têtes si nécessaire
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+      
+  //     if (response.status === 200 || response.status === 201) {
+  //       console.log('Données sauvegardées avec succès !');
+  //       navigation.navigate("EmotionPage", { selectedEmotion });
+  //     } else {
+  //       console.error('Erreur lors de l\'enregistrement des données : ', response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error('Erreur lors de la requête :', error);
+  //     navigation.navigate("EmotionPage",{ selectedEmotion });
+  //   }
+  // };
+
   return (
     <View style={styles.container}>
       <Header />
@@ -249,4 +334,3 @@ const styles = StyleSheet.create({
 });
 
 export default EmotionWheel;
-
