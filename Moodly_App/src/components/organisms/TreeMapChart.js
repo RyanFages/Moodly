@@ -102,24 +102,7 @@ const TreeMapChart = ({ data, width, height }) => {
             <Header />
 
             <Text style={styles.title}>Mon Équipe</Text>
-
-            <Svg width={width} height={height}>
-                {/* Définir un motif pour les hachures */}
-                <Pattern
-                    id="hachures"
-                    patternUnits="userSpaceOnUse"
-                    width="10"
-                    height="10"
-                >
-                    <Line
-                        x1="0"
-                        y1="0"
-                        x2="10"
-                        y2="10"
-                        stroke="black"
-                        strokeWidth="1"
-                    />
-                </Pattern>
+            <View style={styles.TreeMapContainer}><Svg width={width} height={height}>
                 {root.leaves().map((leaf, index) => {
                     const total = leaf.data.value;
 
@@ -160,7 +143,9 @@ const TreeMapChart = ({ data, width, height }) => {
                         </React.Fragment>
                     );
                 })}
-            </Svg>
+            </Svg></View>
+
+            
             <View style={styles.buttonContainer}>
                 <Button
                     title="Aller à la liste des employees"
@@ -185,6 +170,11 @@ const styles = StyleSheet.create({
         marginLeft: '10%', // Décale le bouton de 20 unités vers la droite
         paddingHorizontal: 10,
         bottom: -90,
+    },
+    TreeMapContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 
