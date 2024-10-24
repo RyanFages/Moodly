@@ -1,7 +1,13 @@
 import React from "react";
-import { View, Alert } from "react-native";
-import Svg, { Rect, Text as SvgText, Pattern, Line } from "react-native-svg";
+import { View, Alert, StyleSheet, Text } from "react-native"; // Importer Text depuis react-native
+import Svg, { Rect, Text as SvgText, Pattern, Line } from "react-native-svg"; // Renommer Text en SvgText
 import { treemap, hierarchy } from "d3-hierarchy";
+import Header from "../../components/molecules/TopBar";
+import Button from "../atoms/BottomButton";
+import { useNavigation } from "@react-navigation/native";
+
+
+
 
 // Préparer les données pour le TreeMap : Emotion > Dates
 function prepareData(data) {
@@ -55,6 +61,7 @@ function prepareData(data) {
 }
 
 const TreeMapChart = ({ data, width, height }) => {
+    const navigation = useNavigation();
     const treeData = prepareData(data);
 
     // Créer la hiérarchie du TreeMap
@@ -86,8 +93,16 @@ const TreeMapChart = ({ data, width, height }) => {
         );
     };
 
+    const Manager = () => {
+        navigation.navigate("ManagerList");
+    };
+
     return (
-        <View>
+        <View style={styles.container}>
+            <Header />
+
+            <Text style={styles.title}>Mon Équipe</Text>
+
             <Svg width={width} height={height}>
                 {/* Définir un motif pour les hachures */}
                 <Pattern
@@ -146,8 +161,31 @@ const TreeMapChart = ({ data, width, height }) => {
                     );
                 })}
             </Svg>
+            <View style={styles.buttonContainer}>
+                <Button
+                    title="Aller à la liste des employees"
+                    onPress={(Manager)}
+                />
+            </View>
         </View>
     );
 };
+    
+const styles = StyleSheet.create({
+    container: {
+        flex: 0.9,
+        justifyContent: "space-between",
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+    buttonContainer: {
+        marginLeft: '10%', // Décale le bouton de 20 unités vers la droite
+        paddingHorizontal: 10,
+        bottom: -90,
+    },
+});
 
 export default TreeMapChart;

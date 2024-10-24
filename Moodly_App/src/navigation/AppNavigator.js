@@ -8,6 +8,7 @@ import EmotionPage from "../pages/EmotionPage";
 import RegisterPage from "../pages/RegisterPage";
 import ManagerDashboardPage from "../pages/ManagerDashboardPage";
 import MoodWheel from "../pages/MoodWheel";
+import ManagerList from "../pages/ManagerList";
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +45,11 @@ const AppNavigator = () => {
                     name="MoodWheel"
                     component={MoodWheel}
                     options={{ title: "MoodWheel" }}
+                />
+                <Stack.Screen
+                name="ManagerList"
+                component={ManagerList}
+                options={{ title: "ManagerList" }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
