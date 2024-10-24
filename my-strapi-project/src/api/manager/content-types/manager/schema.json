@@ -21,7 +21,7 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::team.team",
-      "mappedBy": "manager"
+      "mappedBy": "owner_team"
     }
   }
 }
