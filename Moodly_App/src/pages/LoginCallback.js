@@ -19,7 +19,6 @@ const getRole = async ({ jwt }) => {
     }
 };
 
-
 const LoginCallback = async ({ jwt, user }) => {
     const dispatch = useDispatch();
 
@@ -28,7 +27,25 @@ const LoginCallback = async ({ jwt, user }) => {
     // Mettre à jour le store Redux avec les informations de l'utilisateur
     dispatch(setUser({ user, jwt, role }));
 
+    if (role === "manager") {
+        navigation.navigate("ManagerDashboard");
+    } else {
+        try {
+            const response = await axios.get(
+                "http://10.134.197.209:1337/api/",
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        userID: user.id,
+                    },
+                }
+            );
+            const emotion = response.data;
+            navigation.navigate("EmotionPage", { emotion });
+        } catch (error) {
+            console.log("An error occurred:", error.response);
+        }
+    }
 };
 
 export default LoginCallback;
-
