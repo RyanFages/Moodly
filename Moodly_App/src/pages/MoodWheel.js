@@ -11,7 +11,10 @@ import jwtDecode from 'jwt-decode';
 
 
 // import ArrowIcon from '../components/atoms/arrow.png'; // Importer l'icône de flèche
-import ArrowIcon from '../../assets/images/arrow.png'; // Importer l'icône de flèche
+import ArrowIcon from '../../assets/images/arrow.png'; // 
+import MoodDisplayText from '../components/atoms/MoodDisplayText';
+
+
 
 const { width } = Dimensions.get('window');
 const outerRadius = width; // Rayon de la roue
@@ -52,13 +55,29 @@ const emotions = [
 // Calcul de l'angle pour chaque segment (360° / 8 émotions)
 const anglePerEmotion = (2 * Math.PI) / emotions.length;
 
-// Fonction utilitaire pour calculer l'angle entre deux points (position du doigt et centre)
-const calculateAngle = (x, y) => {
+const EmotionWheel = ({navigation}) => {
+// Fonction pour la zone du haut (inverse l'angle)
+const calculateAngleTop = (x, y) => {
   const angle = Math.atan2(y - centerY, x - centerX);
-  return angle;
+  return -angle; // Inverser l'angle pour la zone du haut
 };
 
-const EmotionWheel = ({navigation}) => {
+// Fonction pour la zone du bas (conserve l'angle normal)
+const calculateAngleBottom = (x, y) => {
+  const angle = Math.atan2(y - centerY, x - centerX);
+  return angle; // Pas de changement pour la zone du bas
+};
+
+const normalizeAngleAndSetEmotion = () => {
+  const normalizedAngle = (currentAngle.current % (2 * Math.PI)) + (currentAngle.current < 0 ? 2 * Math.PI : 0);
+  const adjustedAngle = normalizedAngle + Math.PI / 2;
+  const index = Math.floor(((2 * Math.PI) - adjustedAngle) / anglePerEmotion) % emotions.length;
+  const adjustedIndex = (index + emotions.length) % emotions.length;
+
+  setSelectedEmotion(emotions[adjustedIndex].label);
+  setSelectedColor(emotions[adjustedIndex].color);
+};
+
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [selectedColor, setSelectedColor] = useState('#000'); // Couleur de l'émotion sélectionnée
 
@@ -69,52 +88,52 @@ const EmotionWheel = ({navigation}) => {
 
   // Calculer l'émotion en fonction de la rotation initiale
   useEffect(() => {
-   const normalizedAngle = (initialRotation % (2 * Math.PI)) + (initialRotation < 0 ? 2 * Math.PI : 0);
-   const adjustedAngle = normalizedAngle + Math.PI / 2;
-   const index = Math.floor(((2 * Math.PI) - adjustedAngle) / anglePerEmotion) % emotions.length;
-   const adjustedIndex = (index + emotions.length) % emotions.length;
-
-   setSelectedEmotion(emotions[adjustedIndex].label);
-   setSelectedColor(emotions[adjustedIndex].color);
-  }, []); // Ce useEffect se déclenche au chargement
+    normalizeAngleAndSetEmotion(initialRotation, setSelectedEmotion, setSelectedColor);
+  }, []);
 
   // PanResponder pour gérer les mouvements de glissement
-  const panResponder = useRef(
+  const panResponderTop = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderGrant: (evt, gestureState) => {
-        // Sauvegarde l'angle au moment où le mouvement commence
         const { pageX, pageY } = evt.nativeEvent;
-        lastAngle.current = calculateAngle(pageX - width / 2, pageY - width / 2);
+        lastAngle.current = calculateAngleTop(pageX - width / 2, pageY - width / 2); // Utiliser calculateAngleTop pour la zone du haut
       },
       onPanResponderMove: (evt, gestureState) => {
-        // Calculez l'angle en fonction du mouvement de l'utilisateur (basé sur la position du doigt)
         const { pageX, pageY } = evt.nativeEvent;
-        const currentTouchAngle = calculateAngle(pageX - width / 2, pageY - width / 2);
+        const currentTouchAngle = calculateAngleTop(pageX - width / 2, pageY - width / 2);
         const angleDelta = currentTouchAngle - lastAngle.current;
-
+  
         currentAngle.current += angleDelta;
         lastAngle.current = currentTouchAngle;
-
-        // Appliquer la rotation à l'animation
+  
         rotateAnim.setValue(currentAngle.current);
       },
       onPanResponderRelease: () => {
-        // Normaliser l'angle pour qu'il soit entre 0 et 2*PI
-        const normalizedAngle = (currentAngle.current % (2 * Math.PI)) + (currentAngle.current < 0 ? 2 * Math.PI : 0);
-    
-        // Ajustement pour que le sélecteur soit en haut (décalage de -π/2)
-        const adjustedAngle = normalizedAngle + Math.PI / 2;
-    
-        // Calcul de l'émotion en haut de la roue (à 0° dans le référentiel du sélecteur fixe)
-        const index = Math.floor(((2 * Math.PI) - adjustedAngle) / anglePerEmotion) % emotions.length;
-    
-        // S'assurer que l'index est toujours positif
-        const adjustedIndex = (index + emotions.length) % emotions.length;
-    
-        // Met à jour l'émotion sélectionnée
-        setSelectedEmotion(emotions[adjustedIndex].label);
-        setSelectedColor(emotions[adjustedIndex].color); // Mettez à jour la couleur de l'émotion sélectionnée
+        normalizeAngleAndSetEmotion(); // Appel à la nouvelle fonction
+      },
+    })
+  ).current;
+  
+  const panResponderBottom = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderGrant: (evt, gestureState) => {
+        const { pageX, pageY } = evt.nativeEvent;
+        lastAngle.current = calculateAngleBottom(pageX - width / 2, pageY - width / 2); // Utiliser calculateAngleBottom pour la zone du bas
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        const { pageX, pageY } = evt.nativeEvent;
+        const currentTouchAngle = calculateAngleBottom(pageX - width / 2, pageY - width / 2);
+        const angleDelta = currentTouchAngle - lastAngle.current;
+  
+        currentAngle.current += angleDelta;
+        lastAngle.current = currentTouchAngle;
+  
+        rotateAnim.setValue(currentAngle.current);
+      },
+      onPanResponderRelease: () => {
+        normalizeAngleAndSetEmotion(); // Appel à la nouvelle fonction
       },
     })
   ).current;
@@ -152,8 +171,8 @@ const EmotionWheel = ({navigation}) => {
         <Path
           d={pathData}
           fill={emotion.color}
-          stroke="white"
-          strokeWidth={2}
+          // stroke="white"
+          // strokeWidth={2}
         />
         <G
           transform={`translate(${iconX + iconSize / 2}, ${iconY + iconSize / 2}) rotate(${iconRotation * (180 / Math.PI)})`}
@@ -179,10 +198,10 @@ const EmotionWheel = ({navigation}) => {
         style={{
           position: 'absolute',
           zIndex: 1,
-          left: '39.25%', // Centrer horizontalement
-          top: '-12%', // Centrer verticalement
-          width:'11%',
-          height:'20%',
+          alignSelf: 'center',
+          top: '2%', // Centrer verticalement
+          width:'14%',
+          height:'18%',
         }}
       />
     );
@@ -275,30 +294,38 @@ const EmotionWheel = ({navigation}) => {
       <Header />
     <View style={styles.container}>
       
-      <Text style={styles.text}>Aujourd'hui je me sens</Text>
-      <Text style={[styles.centeredEmotionText, { color: selectedColor }]}>
+    <View style={styles.containerText}>
+      <Text style={styles.mainText}>Aujourd'hui je me sens</Text>
+      <Text style={[styles.emotionText, { color: selectedColor }]}>
         {selectedEmotion}
       </Text>
+    </View>
       {/* Vue de la roue des émotions */}
-      <View {...panResponder.panHandlers}>
+      <View style={styles.wheelContainer}>
       {renderArrow()}
-        <Animated.View
-          style={{
-            transform: [{ rotate: rotateAnim.interpolate({
-              inputRange: [-2 * Math.PI, 2 * Math.PI],
-              outputRange: ['-360deg', '360deg']
-            }) }],
-          }}
-        >
-          <Svg width={width - 40} height={width - 40} viewBox={`-${outerRadius} -${outerRadius} ${2 * outerRadius} ${2 * outerRadius}`}>
-            {emotions.map((emotion, index) => renderEmotionSegment(emotion, index))}
-          </Svg>
-        </Animated.View>
+      <Animated.View
+        style={{
+          transform: [{ rotate: rotateAnim.interpolate({
+            inputRange: [-2 * Math.PI, 2 * Math.PI],
+            outputRange: ['-360deg', '360deg']
+          }) }],
+        }}
+      >
+        <Svg width={width - 40} height={width - 40} viewBox={`-${outerRadius} -${outerRadius} ${2 * outerRadius} ${2 * outerRadius}`}>
+          {emotions.map((emotion, index) => renderEmotionSegment(emotion, index))}
+        </Svg>
+      </Animated.View>
+
+      {/* Zones transparentes pour les interactions tactiles */}
+      <View style={styles.touchZonesContainer}>
+        <View style={styles.touchZoneTop} {...panResponderTop.panHandlers} />
+        <View style={styles.touchZoneBottom} {...panResponderBottom.panHandlers} />
       </View>
-        <BottomButton title="Valider" onPress={handleConfirm} />
     </View>
 
-    </View>
+    <BottomButton title="Valider" onPress={handleConfirm} />
+  </View>
+</View>
   );
 };
 
@@ -312,25 +339,66 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-  centeredEmotion: {
-    position: 'absolute',
-    top: '42%', // Ajuster la position pour être centré
-    alignItems: 'center',
+  // centeredEmotion: {
+  //   position: 'absolute',
+  //   top: '42%', // Ajuster la position pour être centré
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   width: 150, // Largeur ajustée pour contenir l'émotion
+  //   height: 150, // Hauteur ajustée
+  // },
+  // centeredEmotionText: {
+  //   fontSize: 24,
+  //   fontWeight: 'bold',
+  //   textAlign: 'center',
+  //   marginBottom: 60,
+  // },
+  // selectedEmotionText: {
+  //   marginTop: 20,
+  //   fontSize: 20,
+  //   fontWeight: 'bold',
+  // },
+  containerText: {
     justifyContent: 'center',
-    width: 150, // Largeur ajustée pour contenir l'émotion
-    height: 150, // Hauteur ajustée
+    alignItems: 'center',
+    marginBottom: 20,
+    position:'absolute',
+    top:20,
+
   },
-  centeredEmotionText: {
+  mainText: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 60,
+    color:'#3B2414',
   },
-  selectedEmotionText: {
-    marginTop: 20,
-    fontSize: 20,
+  wheelContainer: {
+    position: 'relative', // Pour que les zones tactiles se superposent
+    width: '100%',
+    height: '70%', // Ajuster la hauteur pour l'affichage de la roue
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  touchZonesContainer: {
+    position: 'absolute', // Superposer les zones de glissement par-dessus la roue
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  touchZoneTop: {
+    flex: 1,
+  },
+  touchZoneBottom: {
+    flex: 1,
+  },
+  emotionText: {
+    fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
+
+
 
 export default EmotionWheel;

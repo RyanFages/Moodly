@@ -1,74 +1,72 @@
 import React from 'react';
 import { View, StyleSheet, Image} from 'react-native';
-import EmotionText from '../components/atoms/EmotionText';
+import MoodDisplayText from '../components/atoms/MoodDisplayText';
 import BottomButton from "../components/atoms/BottomButton";
 import Header from "../components/molecules/TopBar";
 
 
 const MoodTrackerPage = ({ navigation , route}) => {
   // Choisis ici l'émotion que tu veux afficher
-  const { selectedEmotion } = route.params; // Récupérer l'émotion passée
-  // const selectedEmotion = 'heureux'; // Change cette valeur pour tester d'autres émotions
+  const { selectedEmotion } = route.params; // 
 
   const emotionData = {
-    'heureux': {
+    'Heureux': {
       color: '#FFDD30',
       textColor: '#BC9D03',
-      text: 'heureux',
+      text: 'Heureux',
       image: require('../../assets/images/MoodHeureux.png'),
     },
-    'motivé': {
+    'Motivé': {
       color: '#FF94BD',
       textColor: '#FF307F', 
-      text: 'motivé',
+      text: 'Motivé',
       image: require('../../assets/images/MoodMotive.png'),
     },
-    'neutre': {
+    'Neutre': {
       color: '#B0B0B0',
       textColor: '#737373', 
-      text: 'neutre',
+      text: 'Neutre',
       image: require('../../assets/images/MoodNeutre.png'),
     },
-    'triste': {
+    'Triste': {
       color: '#42A8FD',
       textColor: '#0968B8',
-      text: 'triste',
+      text: 'Triste',
       image: require('../../assets/images/MoodTriste.png'),
     },
-    'énervé': {
+    'Énervé': {
       color: '#FF4545',
       textColor: '#A40000',
-      text: 'énervé',
+      text: 'Énervé',
       image: require('../../assets/images/MoodEnerve.png'),
     },
-    'stressé': {
+    'Stressé': {
       color: '#F68A37',
       textColor: '#B04C00',
-      text: 'stressé',
+      text: 'Stressé',
       image: require('../../assets/images/MoodStresse.png'),
     },
-    'fatigué': {
+    'Fatigué': {
       color: '#9E76D6',
       textColor: '#692CBF',
-      text: 'fatigué',
+      text: 'Fatigué',
       image: require('../../assets/images/MoodFatigue.png'),
     },
-    'frustré': {
+    'Frustré': {
       color: '#2EBB6E',
       textColor: '#156238',
-      text: 'frustré',
+      text: 'Frustré',
       image: require('../../assets/images/MoodFrustre.png'),
     },
   };
 
   // Utilisation de l'émotion actuelle
   // const currentEmotion = emotionData[selectedEmotion];
-  const currentEmotion = emotionData[selectedEmotion.toLowerCase()]; // Convertir l'émotion en minuscules pour la clé
+  const currentEmotion = emotionData[selectedEmotion]; // Convertir l'émotion en minuscules pour la clé
 
 
   const handleModify = () => {
-    // Redirige l'utilisateur vers la page de choix de l'émotion
-    navigation.navigate("MoodWheel"); //Changer "login" par le nom de la page de Kevin
+    navigation.navigate("MoodWheel"); 
   };
 
   return (
@@ -78,7 +76,7 @@ const MoodTrackerPage = ({ navigation , route}) => {
 
       {/* Centered content (text + image) */}
       <View style={styles.centerContent}>
-        <EmotionText emotion={currentEmotion.text} color={currentEmotion.textColor} />
+        <MoodDisplayText mainText="Aujourd'hui je me sens " emotion={currentEmotion.text} color={currentEmotion.textColor} />
         <Image source={currentEmotion.image} style={styles.image} />
         <BottomButton title="Modifier" onPress={handleModify} />
       </View>
@@ -89,20 +87,19 @@ const MoodTrackerPage = ({ navigation , route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between', // Space out top, center, and bottom
     alignItems: 'center',
   },
   centerContent: {
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1, // Takes remaining space after top and bottom elements
-    marginTop: -100, // Moves content slightly higher on the screen
+    flex: 1,
+    marginTop: -260,
   },
   image: {
-    width: 300,  // Set appropriate width for the image
-    height: 300, // Set appropriate height for the image
-    resizeMode: 'contain', // Ensure the image fits inside the box
-    marginTop: -24, // Adds space between the text and image
+    width: 300,
+    height: 300,
+    resizeMode: 'contain',
+    marginTop: 25,
   },
 
 });
