@@ -33,7 +33,7 @@ const LoginPage = () => {
             // await AsyncStorage.setItem("user", JSON.stringify(user));
 
             // Rediriger vers la page d'accueil après la connexion réussie
-            navigation.navigate("Home");
+            navigation.navigate("MoodWheel");
 
         } catch (error) {
             console.log('An error occurred:', error.response);
@@ -51,7 +51,7 @@ const LoginPage = () => {
     return (
         <View>
             <Image
-                source={require('../../../assets/icon.png')}
+                source={require('../../../assets/images/logo.png')}
                 style={styles.image}
             />
             <Text style={globalStyles.title}>Login</Text>
@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
         height: 100,
         marginBottom: 20,
         alignSelf: 'center',
+        borderRadius:16,
     },
     separatorContainer: {
         flexDirection: 'row',
