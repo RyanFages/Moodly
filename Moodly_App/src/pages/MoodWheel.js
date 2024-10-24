@@ -6,7 +6,10 @@ import BottomButton from "../components/atoms/BottomButton";
 import Header from "../components/molecules/TopBar";
 
 // import ArrowIcon from '../components/atoms/arrow.png'; // Importer l'icône de flèche
-import ArrowIcon from '../../assets/images/arrow.png'; // Importer l'icône de flèche
+import ArrowIcon from '../../assets/images/arrow.png'; // 
+import MoodDisplayText from '../components/atoms/MoodDisplayText';
+
+
 
 const { width } = Dimensions.get('window');
 const outerRadius = width; // Rayon de la roue
@@ -147,8 +150,8 @@ const EmotionWheel = ({navigation}) => {
         <Path
           d={pathData}
           fill={emotion.color}
-          stroke="white"
-          strokeWidth={2}
+          // stroke="white"
+          // strokeWidth={2}
         />
         <G
           transform={`translate(${iconX + iconSize / 2}, ${iconY + iconSize / 2}) rotate(${iconRotation * (180 / Math.PI)})`}
@@ -188,12 +191,17 @@ const EmotionWheel = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Header />
-    <View style={styles.container}>
-      
-      <Text style={styles.text}>Aujourd'hui je me sens</Text>
-      <Text style={[styles.centeredEmotionText, { color: selectedColor }]}>
+      <View style={styles.container}>
+
+    <View style={styles.containerText}>
+      <Text style={styles.mainText}>Aujourd'hui je me sens</Text>
+      <Text style={[styles.emotionText, { color: selectedColor }]}>
         {selectedEmotion}
       </Text>
+    </View>
+
+   
+
       {/* Vue de la roue des émotions */}
       <View {...panResponder.panHandlers}>
       {renderArrow()}
@@ -211,7 +219,7 @@ const EmotionWheel = ({navigation}) => {
         </Animated.View>
       </View>
         <BottomButton title="Valider" onPress={handleConfirm} />
-    </View>
+        </View>
 
     </View>
   );
@@ -227,24 +235,43 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-  centeredEmotion: {
-    position: 'absolute',
-    top: '42%', // Ajuster la position pour être centré
-    alignItems: 'center',
+  // centeredEmotion: {
+  //   position: 'absolute',
+  //   top: '42%', // Ajuster la position pour être centré
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   width: 150, // Largeur ajustée pour contenir l'émotion
+  //   height: 150, // Hauteur ajustée
+  // },
+  // centeredEmotionText: {
+  //   fontSize: 24,
+  //   fontWeight: 'bold',
+  //   textAlign: 'center',
+  //   marginBottom: 60,
+  // },
+  // selectedEmotionText: {
+  //   marginTop: 20,
+  //   fontSize: 20,
+  //   fontWeight: 'bold',
+  // },
+  containerText: {
     justifyContent: 'center',
-    width: 150, // Largeur ajustée pour contenir l'émotion
-    height: 150, // Hauteur ajustée
+    alignItems: 'center',
+    marginBottom: 20,
+    position:'absolute',
+    top:50,
+
   },
-  centeredEmotionText: {
+  mainText: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 60,
+    color:'#3B2414',
   },
-  selectedEmotionText: {
-    marginTop: 20,
-    fontSize: 20,
+  emotionText: {
+    fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
